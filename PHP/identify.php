@@ -16,15 +16,22 @@
   </nav>
 
   <br>
-  <h1 style="text-align : center;">Connexion</h1>
+  <h1 style="text-align : center; margin-top : 5vw;">Connexion</h1>
   <div class="container mx-auto p-2" style="width: 500px;">
-    <div class="mb-3">
-      <label for="formGroupExampleInput" class="form-label">E-mail</label>
-      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Entrez un E-Mail valide">
+    <label for="formGroupExampleInput2" class="form-label">Mot de passe</label>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">@</span>
+      <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Entrez un E-Mail valide" aria-label="Username" aria-describedby="basic-addon1">
     </div>
-    <div class="mb-3">
-      <label for="formGroupExampleInput2" class="form-label">Another label</label>
-      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
+
+    <label for="formGroupExampleInput2" class="form-label">Mot de passe</label>
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">🔑</span>
+      <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Entrez un Mot de Passe valide" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <br>
+    <div class="col-12">
+    <button class="btn btn-primary" type="submit">Valider</button>
     </div>
   </div>
 
