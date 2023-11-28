@@ -2,9 +2,9 @@
 
 CREATE TABLE Client (
     email     VARCHAR(50) NOT NULL,
-    nom       VARCHAR(5) NOT NULL,
+    nom       VARCHAR(50) NOT NULL,
     prenom    VARCHAR(50) NOT NULL,
-    telephone INT NOT NULL,
+    telephone INTEGER,
     mdp       VARCHAR(50) NOT NULL,
     CONSTRAINT Client_PK PRIMARY KEY (email)
 );
@@ -19,7 +19,7 @@ CREATE TABLE Medecin (
     num_tel_med     INT NOT NULL,
     specialite      VARCHAR(50) NOT NULL,
     code_postal_med INT NOT NULL,
-    mdp_med         VARCHAR(5) NOT NULL,
+    mdp_med         VARCHAR(50) NOT NULL,
     CONSTRAINT Medecin_PK PRIMARY KEY (email_med)
 );
 
