@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   </head>
   <body>
@@ -29,9 +29,8 @@
       <span class="input-group-text" id="basic-addon1">🔑</span>
       <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Entrez un Mot de Passe valide" aria-label="Username" aria-describedby="basic-addon1">
     </div>
-    <br>
-    <div class="col-12">
-    <button class="btn btn-primary" type="submit">Valider</button>
+    <div class="position-relative">
+    <button class="btn btn-primary position-absolute mt-3" type="submit">Se connecter</button><div id="no_acc" class ="position-absolute start-50 top-50 mt-4">Pas de compte ? <a href="signout.php">Créer un compte</a></div>
     </div>
   </div>
 
