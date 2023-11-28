@@ -1,50 +1,47 @@
---- Table Client---
+--- Table Client ---
 
-CREATE TABLE Client(
-        email     Varchar (50) NOT NULL ,
-        nom       Varchar (5) NOT NULL ,
-        prenom    Varchar (50) NOT NULL ,
-        telephone Int NOT NULL ,
-        mdp       Varchar (50) NOT NULL
-	,CONSTRAINT Client_PK PRIMARY KEY (email)
+CREATE TABLE Client (
+    email     VARCHAR(50) NOT NULL,
+    nom       VARCHAR(5) NOT NULL,
+    prenom    VARCHAR(50) NOT NULL,
+    telephone INT NOT NULL,
+    mdp       VARCHAR(50) NOT NULL,
+    CONSTRAINT Client_PK PRIMARY KEY (email)
 );
 
 
---- Tabke Medecin ---
+--- Table Medecin ---
 
-CREATE TABLE Medecin(
-        email_med       Varchar (50) NOT NULL ,
-        nom_med         Varchar (50) NOT NULL ,
-        prenom_med      Varchar (50) NOT NULL ,
-        num_tel_med     Int NOT NULL ,
-        specialite      Varchar (50) NOT NULL ,
-        code_postal_med Int NOT NULL ,
-        mdp_med         Varchar (5) NOT NULL
-	,CONSTRAINT Medecin_PK PRIMARY KEY (email_med)
+CREATE TABLE Medecin (
+    email_med       VARCHAR(50) NOT NULL,
+    nom_med         VARCHAR(50) NOT NULL,
+    prenom_med      VARCHAR(50) NOT NULL,
+    num_tel_med     INT NOT NULL,
+    specialite      VARCHAR(50) NOT NULL,
+    code_postal_med INT NOT NULL,
+    mdp_med         VARCHAR(5) NOT NULL,
+    CONSTRAINT Medecin_PK PRIMARY KEY (email_med)
 );
 
 
 --- Table rendez-vous ---
 
-CREATE TABLE rendezvous(
-        id_rdv    Int NOT NULL ,
-        heure_rdv Datetime NOT NULL ,
-        email     Varchar (50) NOT NULL ,
-        email_med Varchar (50) NOT NULL
-	,CONSTRAINT rendezvous_PK PRIMARY KEY (id_rdv)
-
-	,CONSTRAINT rendezvous_Client_FK FOREIGN KEY (email) REFERENCES Client(email)
-	,CONSTRAINT rendezvous_Medecin0_FK FOREIGN KEY (email_med) REFERENCES Medecin(email_med)
+CREATE TABLE rendezvous (
+    id_rdv    SERIAL PRIMARY KEY,
+    heure_rdv TIMESTAMP NOT NULL,
+    email     VARCHAR(50) NOT NULL,
+    email_med VARCHAR(50) NOT NULL,
+    CONSTRAINT rendezvous_Client_FK FOREIGN KEY (email) REFERENCES Client(email),
+    CONSTRAINT rendezvous_Medecin0_FK FOREIGN KEY (email_med) REFERENCES Medecin(email_med)
 );
 
 
 --- Table Soigner ---
 
-CREATE TABLE soigner(
-        email     Varchar (50) NOT NULL ,
-        email_med Varchar (50) NOT NULL
-	,CONSTRAINT soigner_PK PRIMARY KEY (email,email_med)
-
-	,CONSTRAINT soigner_Client_FK FOREIGN KEY (email) REFERENCES Client(email)
-	,CONSTRAINT soigner_Medecin0_FK FOREIGN KEY (email_med) REFERENCES Medecin(email_med)
+CREATE TABLE soigner (
+    email     VARCHAR(50) NOT NULL,
+    email_med VARCHAR(50) NOT NULL,
+    CONSTRAINT soigner_PK PRIMARY KEY (email, email_med),
+    CONSTRAINT soigner_Client_FK FOREIGN KEY (email) REFERENCES Client(email),
+    CONSTRAINT soigner_Medecin0_FK FOREIGN KEY (email_med) REFERENCES Medecin(email_med)
 );
