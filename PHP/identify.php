@@ -14,12 +14,9 @@
     </a>
     <?php 
       include "database.php";
-
       if($IS_CONNECTED == true){
         echo '<a href="identify.php" class="navbar-brand mx-auto p-2" onclick=<?php $IS_CONNECTED = false ?>><img src="../Images/deco.png" width="100" height="100"></a>';
       }
-
-
     ?>
   </div>
   </nav>

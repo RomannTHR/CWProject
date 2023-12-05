@@ -6,7 +6,7 @@
     const DB_SERVER = "127.0.0.1";
     const DB_PORT = "5432";
 
-    const IS_CONNECTED = false;
+    $IS_CONNECTED = false;
 
 
     function dbConnect(){
@@ -52,20 +52,6 @@
             }
     }
 
-<<<<<<< Updated upstream
-    function dbGetMed($conn, $specialiste){
-        try{
-        $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite and ';
-        $statement = $conn->prepare($request);
-        $statement->bindParam(':specialite', $specialiste);
-        $statement->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
-      }
-      catch (PDOException $e) {
-        echo 'Connexion échouée : ' . $e->getMessage();
-      }
-=======
     function checkLogin($mail,$mdp){
         try
         {
@@ -86,7 +72,6 @@
             error_log('Request error: '.$exception->getMessage());
             return false;
         }
->>>>>>> Stashed changes
     }
 
 
