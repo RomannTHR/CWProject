@@ -17,16 +17,16 @@
   </nav>
 
   <br>
-  <form method="post">
+  <form action="RDV.php" method="post">
   <h1 style="text-align : center;">Prendre RDV</h1>
   <div class="container mx-auto p-2" style="width: 500px;">
     <div class="mb-3" style="float: left;">
       <label for="formGroupExampleInput" class="form-label">Lieu RDV</label>
-      <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Entrez un lieu de RDV">
+      <input type="text" class="form-control" name='lieu' id="formGroupExampleInput" placeholder="Entrez un lieu de RDV">
     </div>
     <div class="mb-3" style="float: right">
       <label for="formGroupExampleInput2" class="form-label" >Nom spécialiste</label>
-      <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Entrez le nom du spécialiste ou de spécialité">
+      <input type="text" class="form-control" name='specialiste' id="formGroupExampleInput2" placeholder="Entrez le nom du spécialiste ou de spécialité">
     </div>
     <div class="col-12" style="float right">
       <button class="btn btn-primary" type="submit">Submit form</button>
@@ -38,21 +38,20 @@
   </body>
 </html>
 <?php
-    const DB_USER="postgres";
-    const DB_PASSWORD="Timtimbrangers44";
-    const DB_NAME="allobobo";
-    const DB_SERVEUR="127.0.0.1";
-    const DB_PORT="5432";
-    function dbConnect(){
-      $dsn = 'pgsql:dbname='.DB_NAME.';host='.DB_SERVEUR.';port='.DB_PORT;
-      $user = DB_USER;
-      $password = DB_PASSWORD;
-  try {
-  $conn = new PDO($dsn, $user, $password);
-  return $conn;
-  } catch (PDOException $e) {
-  echo 'Connexion échouée : ' . $e->getMessage();
-  }
+    include 'database.php';
+    $lieu=$_POST['lieu'];
+    $specialiste=$_POST['specialiste'];
+    
+
+  //fonction pour avoir les rdv dispo
+
+$db = dbConnect();
+$result = dbGetMed($db, $specialiste,$lieu);
+foreach ($result as $med) {
+  echo $med['nom_med'] .'<br>';
+  echo $med['prenom_med'] .'<br>';
+  echo $med['specialite'] .'<br>';
+  echo $med['heure_rdv'] .'<br>';
 }
-dbConnect();
+print_r($r);
 ?>

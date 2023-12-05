@@ -52,11 +52,12 @@
             }
     }
 
-    function dbGetMed($conn, $specialiste){
+    function dbGetMed($conn, $specialiste,$lieu){
         try{
-        $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite and ';
+        $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite and code_postal_med=:lieu';
         $statement = $conn->prepare($request);
         $statement->bindParam(':specialite', $specialiste);
+        $statement->bindParam(':lieu', $lieu);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result;
