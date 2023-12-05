@@ -83,6 +83,7 @@
           sendDataToDB($nom,$prenom,$tel,$email,$mdp);
         }
       }
+
     
     
     ?>

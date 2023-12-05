@@ -6,6 +6,8 @@
     const DB_SERVER = "127.0.0.1";
     const DB_PORT = "5432";
 
+    const IS_CONNECTED = false;
+
 
     function dbConnect(){
         $dsn = 'pgsql:dbname='.DB_NAME.';host='.DB_SERVER.';port='.DB_PORT;
@@ -43,7 +45,6 @@
             $stmt->bindParam(':mdp',password_hash($mdp, PASSWORD_DEFAULT));
             $stmt->execute(); 
             $conn->commit();
-            echo "Enregistrement effectué"; 
             } catch (PDOException $e) {
                 $conn->rollBack();
                 echo 'Connexion échouée : ' . $e->getMessage();
@@ -51,6 +52,7 @@
             }
     }
 
+<<<<<<< Updated upstream
     function dbGetMed($conn, $specialiste){
         try{
         $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite and ';
@@ -63,6 +65,28 @@
       catch (PDOException $e) {
         echo 'Connexion échouée : ' . $e->getMessage();
       }
+=======
+    function checkLogin($mail,$mdp){
+        try
+        {
+        $isCorrect = false;
+        $conn = dbConnect();
+        $emails = $conn->query('SELECT email,mdp FROM Client');
+        $result = $emails->fetchAll(PDO::FETCH_ASSOC);
+        foreach($result as $email){
+            if($email['email'] == $mail && $email['mdp'] == $mdp){
+                return true;
+            }
+        }
+        return false;
+
+        }
+        catch (PDOException $exception)
+        {
+            error_log('Request error: '.$exception->getMessage());
+            return false;
+        }
+>>>>>>> Stashed changes
     }
 
 
