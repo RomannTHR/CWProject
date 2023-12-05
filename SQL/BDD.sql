@@ -1,7 +1,7 @@
 --- Table Client ---
 
 CREATE TABLE Client (
-    email     VARCHAR(50) NOT NULL,
+    email     VARCHAR(50) NOT NULL ,
     nom       VARCHAR(50) NOT NULL,
     prenom    VARCHAR(50) NOT NULL,
     telephone INTEGER,
