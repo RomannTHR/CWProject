@@ -5,7 +5,7 @@ CREATE TABLE Client (
     nom       VARCHAR(50) NOT NULL,
     prenom    VARCHAR(50) NOT NULL,
     telephone INTEGER,
-    mdp       VARCHAR(50) NOT NULL,
+    mdp       VARCHAR(100) NOT NULL,
     CONSTRAINT Client_PK PRIMARY KEY (email)
 );
 

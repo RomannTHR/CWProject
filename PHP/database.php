@@ -6,6 +6,8 @@
     const DB_SERVER = "127.0.0.1";
     const DB_PORT = "5432";
 
+    $IS_CONNECTED = false;
+
 
     function dbConnect(){
         $dsn = 'pgsql:dbname='.DB_NAME.';host='.DB_SERVER.';port='.DB_PORT;
@@ -43,7 +45,6 @@
             $stmt->bindParam(':mdp',password_hash($mdp, PASSWORD_DEFAULT));
             $stmt->execute(); 
             $conn->commit();
-            echo "Enregistrement effectué"; 
             } catch (PDOException $e) {
                 $conn->rollBack();
                 echo 'Connexion échouée : ' . $e->getMessage();
@@ -53,7 +54,7 @@
 
     function dbGetMed($conn, $specialiste){
         try{
-        $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite';
+        $request = 'SELECT medecin.nom_med,medecin.prenom_med,medecin.specialite,rendezvous.heure_rdv FROM medecin JOIN rendezvous ON medecin.email_med=rendezvous.email_med WHERE medecin.nom_med=:specialite and ';
         $statement = $conn->prepare($request);
         $statement->bindParam(':specialite', $specialiste);
         $statement->execute();
