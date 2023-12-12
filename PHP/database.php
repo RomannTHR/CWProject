@@ -66,6 +66,9 @@
         echo 'Connexion échouée : ' . $e->getMessage();
       }
     }
+    function dbGetRDV($conn){
+
+    }
 
 
 ?>

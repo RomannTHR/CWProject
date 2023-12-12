@@ -17,20 +17,7 @@
   </nav>
 
   <br>
-  <form action="RDV.php" method="post">
-  <h1 style="text-align : center;">Prendre RDV</h1>
-  <div class="container mx-auto p-2" style="width: 500px;">
-    <div class="mb-3" style="float: left;">
-      <label for="formGroupExampleInput" class="form-label">Lieu RDV</label>
-      <input type="text" class="form-control" name='lieu' id="formGroupExampleInput" placeholder="Entrez un lieu de RDV">
-    </div>
-    <div class="mb-3" style="float: right">
-      <label for="formGroupExampleInput2" class="form-label" >Nom spécialiste</label>
-      <input type="text" class="form-control" name='specialiste' id="formGroupExampleInput2" placeholder="Entrez le nom du spécialiste ou de spécialité">
-    </div>
-    <div class="col-12" style="float right">
-      <button class="btn btn-primary" type="submit">Submit form</button>
-  </div>
+  
   </div>
   
 </form>
@@ -48,7 +35,7 @@
   //fonction pour avoir les rdv dispo
 
 $db = dbConnect();
-$result = dbGetMed($db, $specialiste,$lieu);
+$result = dbGetRDV($db, $_SESSION['nom']);
 //faire fonction qui récupère toute les heures dispo
 foreach ($result as $med) {
   echo"<div class='card-group'>
