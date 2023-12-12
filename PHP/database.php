@@ -6,7 +6,6 @@
     const DB_SERVER = "127.0.0.1";
     const DB_PORT = "5432";
 
-    $IS_CONNECTED = false;
 
 
     function dbConnect(){
@@ -28,7 +27,26 @@
         }
     }
 
-
+    function checkLogin($mail,$mdp){
+        try
+        {
+        $isCorrect = false;
+        $conn = dbConnect();
+        $emails = $conn->query('SELECT email,mdp FROM Client');
+        $result = $emails->fetchAll(PDO::FETCH_ASSOC);
+        foreach($result as $email){
+            if($email['email'] == $mail && $email['mdp'] = password_hash($mdp,PASSWORD_DEFAULT)){
+                return true;
+            }
+        }
+        return false;
+        }
+        catch (PDOException $exception)
+        {
+            error_log('Request error: '.$exception->getMessage());
+            return false;
+        }
+    }
 
 
 
@@ -38,6 +56,20 @@
             $conn->beginTransaction();
 
             $stmt = $conn->prepare('INSERT INTO Client(email,nom,prenom,telephone,mdp) VALUES (:email,:nom,:prenom,:telephone,:mdp)');
+
+            // On va vérifier que l'email n'est pas déjà dans la base de données.
+            $email_client = $conn->query('SELECT email FROM client');
+            $result = $email_client->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($result as $mail){
+                if($mail == $email){
+                    return false;
+                }
+            }
+
+
+
+
             $stmt->bindParam(':email',$email);
             $stmt->bindParam(':nom',$nom);
             $stmt->bindParam(':prenom',$prenom);
@@ -67,7 +99,7 @@
       }
     }
     function dbGetRDV($conn){
-
+        
     }
 
 
