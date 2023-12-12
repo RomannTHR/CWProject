@@ -1,3 +1,6 @@
+<?php 
+  session_start();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,6 +14,9 @@
   <div class="container">
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
+    </a>
+    <a href="identify.php" onclick=<?php session_destroy()?>>
+      <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
     </a>
     
   </div>
@@ -35,8 +41,6 @@
   
 </form>
 
-
-
   </body>
 </html>
 <?php
@@ -45,41 +49,37 @@
     $specialiste=$_POST['specialiste'];
     
 
-  //fonction pour avoir les rdv dispo
+    //fonction pour avoir les rdv dispo
 
-$db = dbConnect();
-$result = dbGetMed($db, $specialiste,$lieu);
-//faire fonction qui récupère toute les heures dispo
-foreach ($result as $med) {
-  echo"<div class='card-group'>
-  <div class='card'>
-  <div class='card-body'>
-    <ul>
-      <li style='display: inline-block;margin-left :50px'>
-        <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <h4 class='card-text'>".$med['specialite']."</h4>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <p class='card-text'><small class='text-body-secondary'></small></p>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <div class='col-12' style='float right'>
-          <button class='btn btn-primary' type='submit'>Prendre RDV</button>
+    $db = dbConnect();
+    $result = dbGetMed($db, $specialiste,$lieu);
+    //faire fonction qui récupère toute les heures dispo
+    foreach ($result as $med) {
+      echo"<div class='card-group'>
+      <div class='card'>
+      <div class='card-body'>
+        <ul>
+          <li style='display: inline-block;margin-left :50px'>
+            <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
+          </li>
+          <li style='display: inline-block;margin-left :50px'>
+            <h4 class='card-text'>".$med['specialite']."</h4>
+          </li>
+          <li style='display: inline-block;margin-left :50px'>
+            <p class='card-text'><small class='text-body-secondary'></small></p>
+          </li>
+          <li style='display: inline-block;margin-left :50px'>
+            <div class='col-12' style='float right'>
+              <button class='btn btn-primary' type='submit'>Prendre RDV</button>
+            </div>
+          </li>
         </div>
-      </li>
-    </div>
-    </ul>
-  </div>
-</div>";
-//afficher les rdv dans la liste déroulante.
-  echo $med['nom_med'] .'<br>';
-  echo $med['prenom_med'] .'<br>';
-  echo $med['specialite'] .'<br>';
-  echo $med['heure_rdv'] .'<br>';
-  echo"<div class='col-12' style='float right'><button class='btn btn-primary' type='submit'>Prendre RDV</button></div>";
-  echo$_SESSION['nom'];
-}
-print_r($r);
+        </ul>
+      </div>
+    </div>";
+    }
+    print_r($r);
 ?>
+
+
+

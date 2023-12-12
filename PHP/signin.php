@@ -80,7 +80,12 @@
 
       if(!empty($_POST['Valid'])){
         if(isFormValid($prenom,$nom,$tel,$email,$confemail,$mdp)){
-          sendDataToDB($nom,$prenom,$tel,$email,$mdp);
+          if(sendDataToDB($nom,$prenom,$tel,$email,$mdp) == false){
+            echo "<p style='text-align : center; margin-top : 4em; color : red;'>Vous vous êtes déjà enregistré avec cet e-mail.</p>";
+          }
+          else{
+            sendDataToDB($nom,$prenom,$tel,$email,$mdp);
+          }
         }
       }
 
