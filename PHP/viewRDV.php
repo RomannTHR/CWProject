@@ -12,15 +12,14 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
-    
   </div>
   </nav>
 
   <br>
-  
-  </div>
-  
-</form>
+    <h2 class="text-center">Vos rendez-vous à venir :</h2>
+
+    <h2 class="text-center">Vos rendez-vous précédents :</h2>
+
 
 
 
@@ -28,15 +27,12 @@
 </html>
 <?php
     include 'database.php';
-    $lieu=$_POST['lieu'];
-    $specialiste=$_POST['specialiste'];
-    
-
   //fonction pour avoir les rdv dispo
 
 $db = dbConnect();
 $result = dbGetRDV($db, $_SESSION['nom']);
-//faire fonction qui récupère toute les heures dispo
+//faire fonction qui récupère les rdv prévu
+//faire fonction qui récupère les anciens rdv
 foreach ($result as $med) {
   echo"<div class='card-group'>
   <div class='card'>

@@ -59,12 +59,33 @@
 
     $db = dbConnect();
     $result = dbGetMed($db, $specialiste,$lieu);
+    $day= dbGetRDVByDay($db,$specialiste);
+    
+ 
+    foreach($day as $med){
+      echo"<br>";
+      echo $med['jour'];
+      $jour=$med['jour'];
+      $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
+      echo"<div class='container mt-4'>
+      <label for='choixSpecialiste' class='form-label'>Choisissez un horaire :</label>
+      <select class='form-select' id='choixSpecialiste' name='specialiste'>";
+      foreach($hour_dispo as $hour){
+         echo"<option value='medecin1'>".$hour['heure']."</option>";
+      }
+    echo"</select>
+</div>";
+    }
+
     //faire fonction qui récupère toute les heures dispo
     foreach ($result as $med) {
       echo"<div class='card-group'>
-      <div class='card'>
-      <div class='card-body'>
-        <ul>
+        <div class='card'>
+          <div class='card-body'>
+            <ul>
+              <li>
+          
+              </li>
           <li style='display: inline-block;margin-left :50px'>
             <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
           </li>
@@ -84,6 +105,31 @@
       </div>
     </div>";
     }
+    
+    foreach ($day as $med) {
+      echo "<div class='card-group'>
+          <div class='card'>
+              <div class='card-body'>
+                  <h3 class='card-title'>Dr " . $med['nom_med'] . " " . $med['prenom_med'] . "</h3>
+                  <h4 class='card-text'>" . $med['specialite'] . "</h4>
+                  <form action='RDV.php' method='post'>
+                      <div class='mb-3'>
+                          <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
+                          <select class='form-select' id='choixHoraire' name='horaire'>";
+                              foreach ($hour_dispo as $hour) {
+                                  echo "<option value='medecin1'>" . $hour['heure'] . "</option>";
+                              }
+                  echo "</select>
+                      </div>
+                      <input type='hidden' name='specialiste' value='" . $med['specialite'] . "'>
+                      <button class='btn btn-primary' type='submit'>Prendre RDV</button>
+                  </form>
+              </div>
+          </div>
+      </div>";
+  }
+
+    echo $_SESSION["email"];
     print_r($r);
 ?>
 
