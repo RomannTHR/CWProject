@@ -1,5 +1,5 @@
 <?php 
-  session_start();
+    session_start();
 ?>
 <!doctype html>
 <html lang="en">
@@ -15,7 +15,7 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
-    <a href="identify.php" onclick=<?php session_destroy()?>>
+    <a href="identify.php">
       <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
     </a>
     
@@ -53,7 +53,8 @@
     $lieu=$_POST['lieu'];
     $specialiste=$_POST['specialiste'];
     
-
+    echo $_SESSION["email"];
+    echo $_SESSION["mdp"];
     //fonction pour avoir les rdv dispo
 
     $db = dbConnect();
