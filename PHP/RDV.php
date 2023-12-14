@@ -52,84 +52,68 @@
     include 'database.php';
     $lieu=$_POST['lieu'];
     $specialiste=$_POST['specialiste'];
-    
-    echo $_SESSION["email"];
-    echo $_SESSION["mdp"];
+   
+
+
     //fonction pour avoir les rdv dispo
 
     $db = dbConnect();
     $result = dbGetMed($db, $specialiste,$lieu);
     $day= dbGetRDVByDay($db,$specialiste);
-    
- 
+    //email patient 
+   $email_client=$_SESSION["email"];
+
+    //affiche les heures
     foreach($day as $med){
-      echo"<br>";
-      echo $med['jour'];
       $jour=$med['jour'];
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
-      echo"<div class='container mt-4'>
-      <label for='choixSpecialiste' class='form-label'>Choisissez un horaire :</label>
-      <select class='form-select' id='choixSpecialiste' name='specialiste'>";
-      foreach($hour_dispo as $hour){
-         echo"<option value='medecin1'>".$hour['heure']."</option>";
-      }
-    echo"</select>
-</div>";
+      
     }
 
-    //faire fonction qui récupère toute les heures dispo
+    //afficher les cards pour chaque jour et chaque medecin
     foreach ($result as $med) {
       echo"<div class='card-group'>
         <div class='card'>
-          <div class='card-body'>
-            <ul>
-              <li>
-          
-              </li>
-          <li style='display: inline-block;margin-left :50px'>
-            <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
-          </li>
-          <li style='display: inline-block;margin-left :50px'>
-            <h4 class='card-text'>".$med['specialite']."</h4>
-          </li>
-          <li style='display: inline-block;margin-left :50px'>
-            <p class='card-text'><small class='text-body-secondary'></small></p>
-          </li>
-          <li style='display: inline-block;margin-left :50px'>
-            <div class='col-12' style='float right'>
-              <button class='btn btn-primary' type='submit'>Prendre RDV</button>
-            </div>
-          </li>
-        </div>
-        </ul>
+          <form action='RDV.php' value = 'S'inscrire' type='submit' name='Valid'>
+            <div class='card-body'>
+              <ul>
+                <li>
+                <div class='mb-3'>
+                <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
+                <select class='form-select' id='choixHoraire' name='horaire'>";
+                    foreach ($hour_dispo as $hour) {
+                        echo "<option value='medecin1'>" . $hour['heure'] . "</option>";
+                    }
+        echo "</select>
+            </div>            
+                </li>
+            <li style='display: inline-block;margin-left :50px'>
+              <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
+            </li>
+            <li style='display: inline-block;margin-left :50px'>
+              <h4 class='card-text'>".$med['specialite']."</h4>
+            </li>
+            <li style='display: inline-block;margin-left :50px'>
+              <p class='card-text'><small class='text-body-secondary'></small></p>
+            </li>
+            <li style='display: inline-block;margin-left :50px'>
+              <div class='col-12' style='float right'>
+              <button class='btn btn-primary' name='Valid' type='submit'>Prendre RDV</button>
+              </div>
+            </li>
+          </div>
+          </ul>
+        </form>
       </div>
     </div>";
+    if(!isset($_POST['horaire'])){
+      echo $_POST['horaire'];
     }
-    
-    foreach ($day as $med) {
-      echo "<div class='card-group'>
-          <div class='card'>
-              <div class='card-body'>
-                  <h3 class='card-title'>Dr " . $med['nom_med'] . " " . $med['prenom_med'] . "</h3>
-                  <h4 class='card-text'>" . $med['specialite'] . "</h4>
-                  <form action='RDV.php' method='post'>
-                      <div class='mb-3'>
-                          <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
-                          <select class='form-select' id='choixHoraire' name='horaire'>";
-                              foreach ($hour_dispo as $hour) {
-                                  echo "<option value='medecin1'>" . $hour['heure'] . "</option>";
-                              }
-                  echo "</select>
-                      </div>
-                      <input type='hidden' name='specialiste' value='" . $med['specialite'] . "'>
-                      <button class='btn btn-primary' type='submit'>Prendre RDV</button>
-                  </form>
-              </div>
-          </div>
-      </div>";
-  }
-
-    echo $_SESSION["email"];
+    $email_med=$med['email_med'];
+    //if(!empty($_POST['Valid'])){
+      //addRDV($email_client,$email_med,$jour,$heure,$idrdv);
+    //}
+    }
     print_r($r);
 ?>
 

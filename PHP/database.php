@@ -88,7 +88,7 @@
 
     function dbGetMed($conn, $specialiste,$lieu){
         try{
-        $request = 'SELECT nom_med,prenom_med,specialite FROM medecin WHERE medecin.nom_med=:specialite and code_postal_med=:lieu';
+        $request = 'SELECT nom_med,prenom_med,specialite,email_med FROM medecin WHERE medecin.nom_med=:specialite and code_postal_med=:lieu';
         $statement = $conn->prepare($request);
         $statement->bindParam(':specialite', $specialiste);
         $statement->bindParam(':lieu', $lieu);
@@ -126,6 +126,25 @@
           catch (PDOException $e) {
             echo 'Connexion échouée : ' . $e->getMessage();
           }
+    }
+    function addRDV($email_client,$email_med,$jour,$heure,$idrdv){
+        try {
+            $conn = dbConnect();
+            $conn->beginTransaction();
+
+            $stmt = $conn->prepare('INSERT INTO rendezvous(id_rdv,heure_rdv,email,email_med,jour) VALUES (:idrdv,:heure_rdv,:email,:email_med,:jour)');
+            $stmt->bindParam(':idrdv',$idrdv);
+            $stmt->bindParam(':heure_rdv',$heure);
+            $stmt->bindParam(':email',$email_client);
+            $stmt->bindParam(':email_med',$email_med);
+            $stmt->bindParam(':jour',$jour);
+            $stmt->execute(); 
+            $conn->commit();
+            } catch (PDOException $e) {
+                $conn->rollBack();
+                echo 'Connexion échouée : ' . $e->getMessage();
+                return false;
+            }
     }
 
 
