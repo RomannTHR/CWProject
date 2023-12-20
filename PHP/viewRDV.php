@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,57 +15,65 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
+    <a href="identify.php">
+      <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
+    </a>
   </div>
   </nav>
 
   <br>
-    <h2 class="text-center">Vos rendez-vous à venir :</h2>
+      <?php
+        $dateHeureActuelle=date('Y-m-d H:i:s');
+        include 'database.php';
+        $db = dbConnect();
+        $email_client=$_SESSION['email'];
+        $rdvPassed=getRDVclient($db,$email_client);
+        echo "<h2 class='text-center'>Vos rendez-vous à venir :</h2>";
+        foreach ($rdvPassed as $rdv) {
+            if ($rdv['heure_rdv'] > $dateHeureActuelle) {
+                echo "<div class='card-group'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <ul>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h3 class='card-title'>Dr " . $rdv['nom_med'] . " " . $rdv['prenom_med'] . "</h3>
+                                </li>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" . $rdv['specialite'] . "</h4>
+                                </li>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" . $rdv['heure_rdv'] . "</h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>";
+            }
+        }
 
-    <h2 class="text-center">Vos rendez-vous précédents :</h2>
+        echo "<h2 class='text-center'>Vos rendez-vous précédents :</h2>";
 
-
-
-
+        foreach ($rdvPassed as $rdv) {
+            if ($rdv['heure_rdv'] <= $dateHeureActuelle) {
+                echo "<div class='card-group'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <ul>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h3 class='card-title'>Dr " . $rdv['nom_med'] . " " . $rdv['prenom_med'] . "</h3>
+                                </li>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" . $rdv['specialite'] . "</h4>
+                                </li>
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" . $rdv['heure_rdv'] . "</h4>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>";
+            }
+        }
+      ?>
   </body>
 </html>
-<?php
-    include 'database.php';
-  //fonction pour avoir les rdv dispo
-
-$db = dbConnect();
-$result = dbGetRDV($db, $_SESSION['nom']);
-//faire fonction qui récupère les rdv prévu
-//faire fonction qui récupère les anciens rdv
-foreach ($result as $med) {
-  echo"<div class='card-group'>
-  <div class='card'>
-  <div class='card-body'>
-    <ul>
-      <li style='display: inline-block;margin-left :50px'>
-        <h3 class='card-title'>Dr ".$med['nom_med']." ".$med['prenom_med']."</h3>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <h4 class='card-text'>".$med['specialite']."</h4>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <p class='card-text'><small class='text-body-secondary'></small></p>
-      </li>
-      <li style='display: inline-block;margin-left :50px'>
-        <div class='col-12' style='float right'>
-          <button class='btn btn-primary' type='submit'>Prendre RDV</button>
-        </div>
-      </li>
-    </div>
-    </ul>
-  </div>
-</div>";
-//afficher les rdv dans la liste déroulante.
-  echo $med['nom_med'] .'<br>';
-  echo $med['prenom_med'] .'<br>';
-  echo $med['specialite'] .'<br>';
-  echo $med['heure_rdv'] .'<br>';
-  echo"<div class='col-12' style='float right'><button class='btn btn-primary' type='submit'>Prendre RDV</button></div>";
-  echo$_SESSION['nom'];
-}
-print_r($r);
-?>

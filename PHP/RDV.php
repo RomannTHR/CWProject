@@ -67,14 +67,17 @@
     foreach($day as $med){
       $jour=$med['jour'];
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
-      
     }
-
+    $nbResult=getNumberOfResult($db, $specialiste,$lieu);
+    foreach($day as $med){
+      echo $med['counts'];
+    }
     //afficher les cards pour chaque jour et chaque medecin
+    if (!empty($specialite) || !empty($lieu)) {
     foreach ($result as $med) {
       echo"<div class='card-group'>
         <div class='card'>
-          <form action='RDV.php' value = 'S'inscrire' type='submit' name='Valid'>
+          <form action='RDV.php' method='post'>
             <div class='card-body'>
               <ul>
                 <li>
@@ -94,11 +97,14 @@
               <h4 class='card-text'>".$med['specialite']."</h4>
             </li>
             <li style='display: inline-block;margin-left :50px'>
+              <h4 class='card-text'>".$med['code_postal_med']."</h4>
+            </li>
+            <li style='display: inline-block;margin-left :50px'>
               <p class='card-text'><small class='text-body-secondary'></small></p>
             </li>
             <li style='display: inline-block;margin-left :50px'>
               <div class='col-12' style='float right'>
-              <button class='btn btn-primary' name='Valid' type='submit'>Prendre RDV</button>
+              <input class='btn btn-primary position-absolute mt-3' type='submit' value='Prendre rendez-vous' name='Valid'>
               </div>
             </li>
           </div>
@@ -106,14 +112,25 @@
         </form>
       </div>
     </div>";
-    if(!isset($_POST['horaire'])){
+    
+
+    /*if(!isset($_POST['horaire'])){
       echo $_POST['horaire'];
-    }
+    }*/
+    //définis les variables pour la fonction addRDV
+    $jour=$med['heure'];
+    $heure=$med['heure'];
+    $idrdv=rand(-32768,32767);
     $email_med=$med['email_med'];
-    //if(!empty($_POST['Valid'])){
-      //addRDV($email_client,$email_med,$jour,$heure,$idrdv);
-    //}
+    if(isset($_POST['Valid'])){
+      //addRDV($db,$email_client,$email_med,$jour,$heure,$idrdv);
+      echo htmlspecialchars($_POST['horaire']);
     }
+    }
+  }
+  else{
+    echo"Prenez rdv chez un practicien";
+  }
     print_r($r);
 ?>
 
