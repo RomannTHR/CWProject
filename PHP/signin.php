@@ -12,6 +12,9 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
+    <a href="signinmed.php" class="btn btn-primary">
+      Vous êtes practicien ?
+    </a>
   </div>
   </nav>
     <br>
@@ -74,21 +77,19 @@
       $tel = $_POST['tel'];
       $email = $_POST['email'];
       $confemail = $_POST['confemail'];
-      $mdp = $_POST['email'];
+      $mdp = $_POST['mdp'];
 
 
 
-      if(!empty($_POST['Valid'])){
-        if(isFormValid($prenom,$nom,$tel,$email,$confemail,$mdp)){
-          if(sendDataToDB($nom,$prenom,$tel,$email,$mdp) == false){
-            echo "<p style='text-align : center; margin-top : 4em; color : red;'>Vous vous êtes déjà enregistré avec cet e-mail.</p>";
-          }
-          else{
-            sendDataToDB($nom,$prenom,$tel,$email,$mdp);
-          }
+      if (!empty($_POST['Valid'])) {
+        if (isFormValid($prenom, $nom, $tel, $email, $confemail, $mdp)) {
+            if (sendDataToDB($nom, $prenom, $tel, $email, $mdp)) {
+                echo "<p style='text-align : center; margin-top : 4em; color : green;'>Enregistrement réussi.</p>";
+            } else {
+                echo "<p style='text-align : center; margin-top : 4em; color : red;'>Vous vous êtes déjà enregistré avec cet e-mail.</p>";
+            }
         }
-      }
-
+    }
     
     
     ?>
