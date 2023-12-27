@@ -28,8 +28,11 @@ session_start();
         $db = dbConnect();
         $email_client=$_SESSION['email'];
         $rdvPassed=getRDVclient($db,$email_client);
+        setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
         echo "<h2 class='text-center'>Vos rendez-vous à venir :</h2>";
         foreach ($rdvPassed as $rdv) {
+          $date = new DateTime($jour);
+          $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
             if ($rdv['heure_rdv'] > $dateHeureActuelle) {
                 echo "<div class='card-group'>
                     <div class='card'>
@@ -42,7 +45,7 @@ session_start();
                                     <h4 class='card-text'>" . $rdv['specialite'] . "</h4>
                                 </li>
                                 <li style='display: inline-block;margin-left :50px'>
-                                    <h4 class='card-text'>" . $rdv['heure_rdv'] . "</h4>
+                                    <h4 class='card-text'>" .$formattedDate. "</h4>
                                 </li>
                             </ul>
                         </div>
@@ -54,6 +57,8 @@ session_start();
         echo "<h2 class='text-center'>Vos rendez-vous précédents :</h2>";
 
         foreach ($rdvPassed as $rdv) {
+          $date = new DateTime($jour);
+          $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
             if ($rdv['heure_rdv'] <= $dateHeureActuelle) {
                 echo "<div class='card-group'>
                     <div class='card'>
@@ -66,7 +71,7 @@ session_start();
                                     <h4 class='card-text'>" . $rdv['specialite'] . "</h4>
                                 </li>
                                 <li style='display: inline-block;margin-left :50px'>
-                                    <h4 class='card-text'>" . $rdv['heure_rdv'] . "</h4>
+                                    <h4 class='card-text'>" .$formattedDate. "</h4>
                                 </li>
                             </ul>
                         </div>
