@@ -21,30 +21,28 @@
     
   </div>
   </nav>
-
+  <div class="p-3 mb-2 bg-primary-subtle text-emphasis-primary">
   <br>
-
-  
   <form action="RDV.php" method="post">
-  <h1 style="text-align: center;">Prendre RDV</h1>
+  <h1 style="text-align: center;">Prendre rendez-vous</h1>
   <div class="container mx-auto p-2 text-center" style="max-width: 500px;">
     <div class="d-flex">
-      <div class="flex-fill mr-2">
-        <label for="formGroupExampleInput" class="form-label">Lieu RDV</label>
-        <input type="text" class="form-control" name='lieu' id="formGroupExampleInput" placeholder="Entrez un lieu de RDV">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">🔎</span>
+        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Nom , spécialité"  aria-describedby="basic-addon1" name="specialiste">
       </div>
-      <div class="flex-fill mr-2">
-        <label for="formGroupExampleInput2" class="form-label">Nom spécialiste</label>
-        <input type="text" class="form-control" name='specialiste' id="formGroupExampleInput2" placeholder="Entrez le nom du spécialiste ou de spécialité">
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">🏥</span>
+        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Lieu"  aria-describedby="basic-addon1" name="lieu">
       </div>
-      <div style="padding-top : 30px;width : 175px;"class="ml-auto">
-        <button class="btn btn-primary" type="submit">Submit form</button>
+      <div style="width: 150px;"class="input-group-text">
+        <button class="btn btn-primary" type="submit">Rechercher</button>
       </div>
     </div>
   </div>
 </form>
 
-</form>
+</div>
 
   </body>
 </html>
@@ -68,15 +66,22 @@
       $jour=$med['jour'];
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
     }
-    $nbResult=getNumberOfResult($db, $specialiste,$lieu);
-    foreach($day as $med){
-      echo $med['counts'];
-    }
+    //test
+    $jour=$_POST['horaire'];
+    $heure=$_POST['horaire'];
+    $idrdv=rand(1,32767);
+    $email_med=$_POST['email_med'];
+    //définis les variables pour la fonction addRDV
+    
     //afficher les cards pour chaque jour et chaque medecin
     if (!empty($specialite) || !empty($lieu)) {
     foreach ($result as $med) {
+      setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
+      $date = new DateTime($jour);
+      $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
       echo"<div class='card-group'>
-        <div class='card'>
+        <div class='card border-info border-4 mx-4 rounded-0' style='background-color: #f8f9fa;'>
+        <h4 class='card-text'>".$formattedDate."</h4>
           <form action='RDV.php' method='post'>
             <div class='card-body'>
               <ul>
@@ -85,7 +90,8 @@
                 <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
                 <select class='form-select' id='choixHoraire' name='horaire'>";
                     foreach ($hour_dispo as $hour) {
-                        echo "<option value='medecin1'>" . $hour['heure'] . "</option>";
+                        echo "<option value=".$hour['jour'].">" . $hour['heure'] ." </option>";
+                        
                     }
         echo "</select>
             </div>            
@@ -97,6 +103,10 @@
               <h4 class='card-text'>".$med['specialite']."</h4>
             </li>
             <li style='display: inline-block;margin-left :50px'>
+              <input type='hidden' name='email_med' value='".$med['email_med']."'>
+              <h4 class='card-text'>".$med['email_med']."</h4>
+            </li>
+            <li style='display: inline-block;margin-left :50px'>
               <h4 class='card-text'>".$med['code_postal_med']."</h4>
             </li>
             <li style='display: inline-block;margin-left :50px'>
@@ -104,7 +114,7 @@
             </li>
             <li style='display: inline-block;margin-left :50px'>
               <div class='col-12' style='float right'>
-              <input class='btn btn-primary position-absolute mt-3' type='submit' value='Prendre rendez-vous' name='Valid'>
+              <input class='btn btn-primary position-absolute mt-3' type='submit' value='Prendre rendez-vous' name='valid'>
               </div>
             </li>
           </div>
@@ -112,25 +122,17 @@
         </form>
       </div>
     </div>";
-    
+    }
 
-    /*if(!isset($_POST['horaire'])){
-      echo $_POST['horaire'];
-    }*/
-    //définis les variables pour la fonction addRDV
-    $jour=$med['heure'];
-    $heure=$med['heure'];
-    $idrdv=rand(-32768,32767);
-    $email_med=$med['email_med'];
-    if(isset($_POST['Valid'])){
-      //addRDV($db,$email_client,$email_med,$jour,$heure,$idrdv);
-      echo htmlspecialchars($_POST['horaire']);
-    }
-    }
   }
-  else{
-    echo"Prenez rdv chez un practicien";
+  if(isset($_POST['valid'])){
+    addRDV($db,$email_client,$email_med,$jour,$heure,$idrdv);
+    supprMedRdvDispo($db,$email_med,$jour);
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    Vous avez bien pris votre rendez-vous! Merci.
+  </div>";
   }
+   
     print_r($r);
 ?>
 
