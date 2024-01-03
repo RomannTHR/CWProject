@@ -270,4 +270,58 @@
           }
     }
 
+
+    function insertDispoByDay($email_med,$day,$hours){
+        try{
+            $conn = dbConnect();
+
+            $date = str_replace('/', '-', $day);
+            
+            $date_org = DateTime::createFromFormat('d-m-Y', $date);
+
+            $date_final = $date_org->format('Y-m-d');
+
+
+            // On va vérifier que la date n'est pas déjà dans la base de données.
+            
+            $date_rdv = $conn->prepare  ('SELECT date_dispo FROM jour WHERE date_dispo = :date_dispo');
+            $date_rdv->bindParam(':date_dispo', $date_final);
+            $date_rdv->execute();
+            $existingDate = $date_rdv->fetch(PDO::FETCH_ASSOC);
+    
+            if (!$existingDate) {
+                $request = 'INSERT INTO jour(date_dispo,email_med) VALUES (:date_dispo,:email)';
+                $statement = $conn->prepare($request);
+                $statement->bindParam(':date_dispo', $date_final);
+                $statement->bindParam(':email', $email_med);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+        
+
+            foreach($hours as $hour){
+                $heure_rdv = $conn->prepare ('SELECT heure FROM heure_dispo WHERE heure = :heure');
+                $heure_rdv->bindParam(':heure', $hour);
+                $heure_rdv->execute();
+                $existingHour = $heure_rdv->fetch(PDO::FETCH_ASSOC);
+
+                
+                if(!$existingHour){
+                    $request = 'INSERT INTO heure_dispo(heure,date_dispo,email_med) VALUES (:heure,:date_dispo,:email)';
+                    $statement = $conn->prepare($request);
+                    $statement->bindParam(':heure', $hour);
+                    $statement->bindParam(':date_dispo', $date_final);
+                    $statement->bindParam(':email', $email_med);
+                    $statement->execute();
+                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                }
+
+            }
+          }
+          catch (PDOException $e) {
+            echo 'Connexion échouée : ' . $e->getMessage();
+          }
+    }
+
 ?>
