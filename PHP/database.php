@@ -90,7 +90,7 @@
         try{
         $specialiste='%'.$specialiste.'%';
         $lieu='%'.$lieu.'%';
-        $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND code_postal_med LIKE :lieu';
+        $request = 'SELECT nom_med,prenom_med,specialite,medecin.email_med,code_postal_med,jour FROM medecin JOIN jour ON medecin.email_med=jour.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND code_postal_med LIKE :lieu';
         $statement = $conn->prepare($request);
         $statement->bindParam(':specialite', $specialiste,PDO::PARAM_STR);
         $statement->bindParam(':lieu', $lieu,PDO::PARAM_STR);
@@ -166,7 +166,7 @@
     }
     function getRDVclient($conn,$email_client){
         try{
-            $request = 'SELECT heure_rdv,nom_med,prenom_med,specialite,code_postal_med from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
+            $request = 'SELECT heure_rdv,nom_med,prenom_med,specialite,code_postal_med,id_rdv from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
             $statement = $conn->prepare($request);
             $statement->bindParam(':email', $email_client);
             $statement->execute();

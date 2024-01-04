@@ -36,7 +36,7 @@
         <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Lieu"  aria-describedby="basic-addon1" name="lieu">
       </div>
       <div style="width: 150px;"class="input-group-text">
-        <button class="btn btn-primary" type="submit">Rechercher</button>
+        <button name='research' class="btn btn-primary" type="submit">Rechercher</button>
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
     include 'database.php';
     $lieu=$_POST['lieu'];
     $specialiste=$_POST['specialiste'];
-   
+    
 
 
     //fonction pour avoir les rdv dispo
@@ -58,25 +58,43 @@
     $db = dbConnect();
     $result = dbGetMed($db, $specialiste,$lieu);
     $day= dbGetRDVByDay($db,$specialiste);
-    //email patient 
-   $email_client=$_SESSION["email"];
+    //email patient en fonciton de la session
+    $email_client=$_SESSION["email"];
 
+    //affiche le nombre de résultat obtenus
+    if(isset($_POST['research'])){
+      $NumberOfResult = getNumberOfResult($db, $specialiste, $lieu);
+      if ($NumberOfResult && !empty($NumberOfResult)) {
+        $Résultats = $NumberOfResult[0]['counts'];
+        if($Résultats==0){
+          echo "Aucun résultat trouvé.";
+        }
+        if($Résultats==1){
+          echo $Résultats." résultat trouvé";
+        }
+        else {
+          echo $Résultats." résultats trouvés";
+      }
+    }
+  }
+    
     //affiche les heures
     foreach($day as $med){
       $jour=$med['jour'];
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
     }
-    //test
+    //définis les variables pour la fonction addRDV
     $jour=$_POST['horaire'];
     $heure=$_POST['horaire'];
     $idrdv=rand(1,32767);
     $email_med=$_POST['email_med'];
-    //définis les variables pour la fonction addRDV
+   
     
     //afficher les cards pour chaque jour et chaque medecin
     if (!empty($specialite) || !empty($lieu)) {
     foreach ($result as $med) {
       setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
+      $jour=$med['jour'];
       $date = new DateTime($jour);
       $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
       echo"<div class='card-group'>
@@ -121,7 +139,8 @@
           </ul>
         </form>
       </div>
-    </div>";
+    </div>
+    <br>";
     }
 
   }
@@ -135,6 +154,20 @@
    
     print_r($r);
 ?>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
-
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h4 class="display-4 text-primary">Allobobo c'est ...</h4>
+            <p class="d-inline-block mx-3 h5 text-primary">70 millions d'utilisateurs quotidiens <i class="material-icons">&#xe7ef;</i></p>
+            <p class="d-inline-block mx-3 h5 text-primary">500 000 praticiens <i class="material-icons">&#xf109;</i></p>
+            <p class="d-inline-block mx-3 h5 text-primary">40 pays partenaires <i class="material-icons">&#xe2db;</i></p>
+        </div>
+        <div class="col-md-12 text-center mt-4">
+            <p class="d-inline-block mx-3 h5 text-primary">#1 des plateformes de prises de rendez-vous en ligne <i class="material-icons">&#xea3f;</i></p>
+            <p class="d-inline-block mx-3 h5 text-primary">98 % de satisfaction <i class="material-icons">&#xe7f2;</i></p>
+        </div>
+    </div>
+</div>
