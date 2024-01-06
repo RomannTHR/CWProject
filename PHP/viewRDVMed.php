@@ -182,6 +182,38 @@
     <h1 style="text-align : center;"> Votre agenda </h1>
     <br>
     <div id='calendar' style="width : 80%; margin-left : 10vw; border : solid; padding: 0.5vw; border-width : 1px;"></div> 
+    <br>
+    <h1 style="text-align : center;"> Vos prochains rendez-vous </h1>
+    <?php 
+      require_once("database.php");
+              
+
+      $rdvs = getNextRDVByMed($_SESSION['email']);
+      echo '<br>';
+      echo '<div class="row justify-content-center">';
+      foreach($rdvs as $rdv){
+
+        $original_date = new DateTime($rdv['heure_rdv']);
+        $heure = $original_date->format('H:i:s');
+
+        setlocale(LC_TIME, 'fr_FR.utf8');
+
+        $newdate = strftime("%A %d %B %Y", $original_date->getTimestamp());
+
+        echo '<div class="col-md-4 mb-4">';
+        echo '<div class="card mx-auto" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">'.$newdate.'</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">'.$heure.'</h6>
+          <p class="card-text"><b>Prenom : </b>'.$rdv['prenom'].'</p>
+          <p class="card-text"><b>Nom : </b>'.$rdv['nom'].'</p>
+          <p class="card-text"><b>Telephone: </b>'.$rdv['telephone'].'</p>
+        </div>
+      </div>';
+      echo '</div>';
+      }
+      echo '</div>';
+    ?>
   </body>
 
   

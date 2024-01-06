@@ -45,7 +45,7 @@
         $emails = $conn->query('SELECT email,mdp FROM Client');
         $result = $emails->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as $email){
-            if($email['email'] == $mail && $email['mdp'] = password_hash($mdp,PASSWORD_DEFAULT)){
+            if($email['email'] == $mail && password_verify($mdp,$email['mdp'])){
                 return true;
             }
         }
@@ -66,7 +66,7 @@
         $emails = $conn->query('SELECT email_med,mdp_med FROM medecin;');
         $result = $emails->fetchAll(PDO::FETCH_ASSOC);
         foreach($result as $email){
-            if($email['email_med'] == $mail && $email['mdp_med'] = password_hash($mdp,PASSWORD_DEFAULT)){
+            if($email['email_med'] == $mail && password_verify($mdp,$email['mdp_med'])){
                 return true;
             }
         }
@@ -158,7 +158,7 @@
         try{
         $specialiste='%'.$specialiste.'%';
         $lieu='%'.$lieu.'%';
-        $request = 'SELECT nom_med,prenom_med,specialite,medecin.email_med,code_postal_med,jour FROM medecin JOIN jour ON medecin.email_med=jour.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND code_postal_med LIKE :lieu';
+        $request = 'SELECT nom_med,prenom_med,specialite,medecin.email_med,code_postal_med,date_dispo FROM medecin JOIN jour ON medecin.email_med=jour.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND code_postal_med LIKE :lieu';
         $statement = $conn->prepare($request);
         $statement->bindParam(':specialite', $specialiste,PDO::PARAM_STR);
         $statement->bindParam(':lieu', $lieu,PDO::PARAM_STR);
@@ -173,7 +173,7 @@
     function dbGetRDVByDay($conn,$specialiste){
         try{
             $specialiste='%'.$specialiste.'%';
-            $request = 'SELECT DISTINCT jour FROM heure_dispo join medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite' ;
+            $request = 'SELECT DISTINCT date_dispo FROM heure_dispo join medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite' ;
             $statement = $conn->prepare($request);
             $statement->bindParam(':specialite', $specialiste);
             $statement->execute();
@@ -187,7 +187,7 @@
     function dbGetRDVByHour($conn,$specialiste,$jour){
         try{
             $specialiste='%'.$specialiste.'%';
-            $request = 'SELECT DISTINCT heure,jour FROM heure_dispo JOIN medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND jour=:jour';
+            $request = 'SELECT DISTINCT heure,date_dispo FROM heure_dispo JOIN medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND date_dispo=:jour';
             $statement = $conn->prepare($request);
             $statement->bindParam(':specialite', $specialiste);
             $statement->bindParam(':jour',$jour);
@@ -226,7 +226,7 @@
         try {
             $conn = dbConnect();
             $conn->beginTransaction();
-            $stmt = $conn->prepare('INSERT INTO rendezvous(id_rdv,heure_rdv,email,email_med,jour) VALUES (:idrdv,:heure_rdv,:email,:email_med,:jour)');
+            $stmt = $conn->prepare('INSERT INTO rendezvous(id_rdv,heure_rdv,email,email_med,date_dispo) VALUES (:idrdv,:heure_rdv,:email,:email_med,:jour)');
             $stmt->bindParam(':idrdv',$idrdv);
             $stmt->bindParam(':heure_rdv',$heure);
             $stmt->bindParam(':email',$email_client);
@@ -245,7 +245,7 @@
         try {
             $conn = dbConnect();
             $conn->beginTransaction();
-            $stmt = $conn->prepare('DELETE FROM heure_dispo WHERE jour=:jour AND email_med=:email_med');
+            $stmt = $conn->prepare('DELETE FROM heure_dispo WHERE date_dispo=:jour AND email_med=:email_med');
             $stmt->bindParam(':email_med',$email_med);
             $stmt->bindParam(':jour',$jour);
             $stmt->execute(); 
@@ -336,6 +336,23 @@
                 }
 
             }
+          }
+          catch (PDOException $e) {
+            echo 'Connexion échouée : ' . $e->getMessage();
+          }
+    }
+
+    function getNextRDVByMed($email_med){
+        try{
+            $conn = dbConnect();
+
+            $request = 'SELECT *,client.nom,client.prenom,client.telephone FROM rendezvous JOIN client ON client.email = rendezvous.email WHERE heure_rdv > CURRENT_DATE AND email_med = :emailmed LIMIT 10';
+            $statement = $conn->prepare($request);
+            $statement->bindParam(':emailmed', $email_med);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
           }
           catch (PDOException $e) {
             echo 'Connexion échouée : ' . $e->getMessage();

@@ -69,7 +69,7 @@
         if($Résultats==0){
           echo "Aucun résultat trouvé.";
         }
-        if($Résultats==1){
+        else if($Résultats==1){
           echo $Résultats." résultat trouvé";
         }
         else {
@@ -84,8 +84,8 @@
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
     }
     //définis les variables pour la fonction addRDV
-    $jour=$_POST['horaire'];
-    $heure=$_POST['horaire'];
+    $jour= $_POST['horaire'];
+    $heure= $_POST['horaire'];
     $idrdv=rand(1,32767);
     $email_med=$_POST['email_med'];
    
