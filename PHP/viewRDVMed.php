@@ -153,11 +153,7 @@
 
                   $heures = $_POST['heures'];
                   
-                  echo $_SESSION['email'];
-                  
                   if(!empty($_POST['Add'])){
-                    echo $date;
-                    echo $heures;
                     insertDispoByDay($_SESSION['email'],$date,$heures);
                   }
                 
@@ -206,6 +202,7 @@
 
         echo '<div class="col-md-4 mb-4">';
         echo '<div class="card mx-auto" style="width: 18rem;">
+        <img src="../Images/Allobobo.png" class="card-img-top">
         <div class="card-body">
           <h5 class="card-title">'.$newdate.'</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">'.$heure.'</h6>
