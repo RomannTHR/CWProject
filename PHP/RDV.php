@@ -15,9 +15,13 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
+    <a href="viewRDV.php">
+      <h1 style="text-align: center;">Voir ses rendez-vous</h1>
+    </a>
     <a href="identify.php">
       <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
     </a>
+    
     
   </div>
   </nav>
@@ -60,7 +64,7 @@
     $day= dbGetRDVByDay($db,$specialiste);
     //email patient en fonciton de la session
     $email_client=$_SESSION["email"];
-
+    echo $email_client;
     //affiche le nombre de résultat obtenus
     if(isset($_POST['research'])){
       $NumberOfResult = getNumberOfResult($db, $specialiste, $lieu);
@@ -80,7 +84,7 @@
     
     //affiche les heures
     foreach($day as $med){
-      $jour=$med['jour'];
+      $jour=$med['date_dispo'];
       $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
     }
     //définis les variables pour la fonction addRDV
@@ -94,7 +98,7 @@
     if (!empty($specialite) || !empty($lieu)) {
     foreach ($result as $med) {
       setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
-      $jour=$med['jour'];
+      $jour=$med['date_dispo'];
       $date = new DateTime($jour);
       $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
       echo"<div class='card-group'>
