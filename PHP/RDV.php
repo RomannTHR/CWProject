@@ -45,7 +45,7 @@
 </div>
 
 <div class='container'>
-          <div class='d-flex justify-content-center'>";
+          <div class='d-flex justify-content-center ' style="flex-wrap : wrap;">";
 <?php
 
 
