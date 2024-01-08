@@ -156,12 +156,10 @@
 
     function dbGetMed($conn, $specialiste,$lieu){
         try{
-        $specialiste='%'.$specialiste.'%';
-        $lieu='%'.$lieu.'%';
-        $request = 'SELECT nom_med,prenom_med,specialite,medecin.email_med,code_postal_med,date_dispo FROM medecin JOIN jour ON medecin.email_med=jour.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND code_postal_med LIKE :lieu';
+        $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE specialite = :spe OR nom_med = :spe AND code_postal_med = :codepos';
         $statement = $conn->prepare($request);
-        $statement->bindParam(':specialite', $specialiste,PDO::PARAM_STR);
-        $statement->bindParam(':lieu', $lieu,PDO::PARAM_STR);
+        $statement->bindParam(':spe', $specialiste);
+        $statement->bindParam(':codepos', $lieu);
         $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $result;
@@ -170,12 +168,13 @@
         echo 'Connexion échouée : ' . $e->getMessage();
       }
     }
-    function dbGetRDVByDay($conn,$specialiste){
+    
+    
+    function dbGetRDVByDay($conn,$email_med){
         try{
-            $specialiste='%'.$specialiste.'%';
-            $request = 'SELECT DISTINCT date_dispo FROM heure_dispo join medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite' ;
+            $request = 'SELECT date_dispo FROM jour WHERE email_med = :email_med;' ;
             $statement = $conn->prepare($request);
-            $statement->bindParam(':specialite', $specialiste);
+            $statement->bindParam(':email_med', $email_med);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -184,12 +183,14 @@
             echo 'Connexion échouée : ' . $e->getMessage();
           }
     }
-    function dbGetRDVByHour($conn,$specialiste,$jour){
+
+
+
+    function dbGetRDVByHour($conn,$email_med,$jour){
         try{
-            $specialiste='%'.$specialiste.'%';
-            $request = 'SELECT DISTINCT heure,date_dispo FROM heure_dispo JOIN medecin ON medecin.email_med=heure_dispo.email_med WHERE medecin.nom_med LIKE :specialite OR medecin.specialite LIKE :specialite AND date_dispo=:jour';
+            $request = 'SELECT heure FROM heure_dispo WHERE email_med = :email_med AND date_dispo = :jour';
             $statement = $conn->prepare($request);
-            $statement->bindParam(':specialite', $specialiste);
+            $statement->bindParam(':email_med', $email_med);
             $statement->bindParam(':jour',$jour);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -199,6 +200,7 @@
             echo 'Connexion échouée : ' . $e->getMessage();
           }
     }
+    
 
     function addRDVInCalendar($email_med){
         try{
@@ -226,12 +228,12 @@
         try {
             $conn = dbConnect();
             $conn->beginTransaction();
-            $stmt = $conn->prepare('INSERT INTO rendezvous(id_rdv,heure_rdv,email,email_med,date_dispo) VALUES (:idrdv,:heure_rdv,:email,:email_med,:jour)');
+            $date_dispo = date('Y-m-d H:i:s', strtotime("$jour $heure"));
+            $stmt = $conn->prepare('INSERT INTO rendezvous(id_rdv,heure_rdv,email,email_med) VALUES (:idrdv,:heure_rdv,:email,:email_med)');
             $stmt->bindParam(':idrdv',$idrdv);
-            $stmt->bindParam(':heure_rdv',$heure);
+            $stmt->bindParam(':heure_rdv',$date_dispo);
             $stmt->bindParam(':email',$email_client);
             $stmt->bindParam(':email_med',$email_med);
-            $stmt->bindParam(':jour',$jour);
             $stmt->execute(); 
             $conn->commit();
         } catch (PDOException $e) {
@@ -241,12 +243,13 @@
             }
     }
 
-    function supprMedRdvDispo($conn,$email_med,$jour){
+    function supprMedRdvDispo($conn,$email_med,$jour,$heure){
         try {
             $conn = dbConnect();
             $conn->beginTransaction();
-            $stmt = $conn->prepare('DELETE FROM heure_dispo WHERE date_dispo=:jour AND email_med=:email_med');
+            $stmt = $conn->prepare('DELETE FROM heure_dispo WHERE date_dispo=:jour AND email_med=:email_med AND heure = :heure');
             $stmt->bindParam(':email_med',$email_med);
+            $stmt->bindParam(':jour',$jour);
             $stmt->bindParam(':jour',$jour);
             $stmt->execute(); 
             $conn->commit();
@@ -295,19 +298,20 @@
 
             $date = str_replace('/', '-', $day);
             
-            $date_org = DateTime::createFromFormat('d-m-Y', $date);
+            $date_org = DateTime::createFromFormat('m-d-Y', $date);
 
             $date_final = $date_org->format('Y-m-d');
 
 
             // On va vérifier que la date n'est pas déjà dans la base de données.
             
-            $date_rdv = $conn->prepare  ('SELECT date_dispo FROM jour WHERE date_dispo = :date_dispo');
+            $date_rdv = $conn->prepare  ('SELECT date_dispo FROM jour WHERE date_dispo = :date_dispo AND email_med = :email_med');
             $date_rdv->bindParam(':date_dispo', $date_final);
+            $date_rdv->bindParam(':email_med', $email_med);
             $date_rdv->execute();
             $existingDate = $date_rdv->fetch(PDO::FETCH_ASSOC);
     
-            if (!$existingDate) {
+            if(!$existingDate) {
                 $request = 'INSERT INTO jour(date_dispo,email_med) VALUES (:date_dispo,:email)';
                 $statement = $conn->prepare($request);
                 $statement->bindParam(':date_dispo', $date_final);
@@ -319,8 +323,10 @@
         
 
             foreach($hours as $hour){
-                $heure_rdv = $conn->prepare ('SELECT heure FROM heure_dispo WHERE heure = :heure');
+                $heure_rdv = $conn->prepare ('SELECT heure FROM heure_dispo WHERE heure = :heure AND email_med = :email_med AND date_dispo = :date_dispo');
                 $heure_rdv->bindParam(':heure', $hour);
+                $date_rdv->bindParam(':date_dispo', $date_final);
+                $date_rdv->bindParam(':email_med', $email_med);
                 $heure_rdv->execute();
                 $existingHour = $heure_rdv->fetch(PDO::FETCH_ASSOC);
 

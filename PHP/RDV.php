@@ -46,8 +46,103 @@
 
   </body>
 </html>
+
 <?php
-    include 'database.php';
+
+
+
+  $specialite = $_POST['specialiste'];
+  $lieu = $_POST['lieu'];
+  
+  require_once("database.php");
+
+  $conn = dbConnect();
+  $medecins = dbGetMed($conn, $specialite,$lieu);
+
+  foreach($medecins as $medecin){
+    $jours = dbGetRDVByDay($conn,$medecin['email_med']);
+
+    foreach($jours as $jour){
+
+      $heures = dbGetRDVByHour($conn,$medecin['email_med'],$jour['date_dispo']);
+
+      setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
+      $date = new DateTime($jour['date_dispo']);
+      $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
+
+      echo"<div class='card-group'>
+          <div class='card border-info border-4 mx-4 rounded-0' style='background-color: #f8f9fa;'>
+          <h4 class='card-text'>".$formattedDate."</h4>
+            <form action='RDV.php' method='post'>
+              <div class='card-body'>
+                <ul>
+                  <li>
+                  <div class='mb-3'>
+                  <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
+                  <select class='form-select' id='choixHoraire' name='horaire'>";
+                      foreach ($heures as $heure) {
+                          echo "<option value=".$jour['date_dispo'].">" . $heure['heure'] ." </option>";
+                          
+                      }
+          echo "</select>
+              </div>            
+                  </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <h3 class='card-title'>Dr ".$medecin['nom_med']." ".$medecin['prenom_med']."</h3>
+              </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <h4 class='card-text'>".$medecin['specialite']."</h4>
+              </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <input type='hidden' name='email_med' value='".$medecin['email_med']."'>
+                <h4 class='card-text'>".$medecin['email_med']."</h4>
+              </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <h4 class='card-text'>".$medecin['code_postal_med']."</h4>
+              </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <p class='card-text'><small class='text-body-secondary'></small></p>
+              </li>
+              <li style='display: inline-block;margin-left :50px'>
+                <div class='col-12' style='float right'>
+                <input class='btn btn-primary position-absolute mt-3' type='submit' value='Prendre rendez-vous' name='valid'>
+                </div>
+              </li>
+            </div>
+            </ul>
+          </form>
+        </div>
+      </div>
+      <br>";
+
+      $idrdv=rand(1,32767);
+
+      if(!empty($_POST['valid'])){
+        addRDV($conn,$_SESSION["email"],$medecin['email_med'],$jour['date_dispo'],$_POST['horaire'],$idrdv);
+        supprMedRdvDispo($conn,$medecin['email_med'],$jour['date_dispo']);
+        echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+        Vous avez bien pris votre rendez-vous! Merci.
+      </div>";
+      }
+    }
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+    /*include 'database.php';
     $lieu=$_POST['lieu'];
     $specialiste=$_POST['specialiste'];
     
@@ -80,23 +175,24 @@
     
     //affiche les heures
     foreach($day as $med){
-      $jour=$med['jour'];
-      $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
+      $jour=$med['date_dispo'];
     }
+    
     //définis les variables pour la fonction addRDV
     $jour= $_POST['horaire'];
     $heure= $_POST['horaire'];
     $idrdv=rand(1,32767);
-    $email_med=$_POST['email_med'];
+    $email_med=$_POST['email_med'];*/
    
     
     //afficher les cards pour chaque jour et chaque medecin
-    if (!empty($specialite) || !empty($lieu)) {
+    /*if (!empty($specialite) || !empty($lieu)) {
     foreach ($result as $med) {
       setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
-      $jour=$med['jour'];
+      $jour=$med['date_dispo'];
       $date = new DateTime($jour);
       $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
+      $hour_dispo= dbGetRDVByHour($db,$specialiste,$med['date_dispo']);
       echo"<div class='card-group'>
         <div class='card border-info border-4 mx-4 rounded-0' style='background-color: #f8f9fa;'>
         <h4 class='card-text'>".$formattedDate."</h4>
@@ -108,7 +204,7 @@
                 <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
                 <select class='form-select' id='choixHoraire' name='horaire'>";
                     foreach ($hour_dispo as $hour) {
-                        echo "<option value=".$hour['jour'].">" . $hour['heure'] ." </option>";
+                        echo "<option value=".$hour['date_dispo'].">" . $hour['heure'] ." </option>";
                         
                     }
         echo "</select>
@@ -152,8 +248,9 @@
   </div>";
   }
    
-  print_r($r);
+  print_r($r);*/
 ?>
+
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 

@@ -52,8 +52,8 @@
 
     if(!empty($_POST['connect'])){
       if(checkLogin($email_login, $mdp_login)){
-          $_SESSION["email_med"] = $email_login;
-          $_SESSION["mdp_med"] = password_hash($mdp_login,PASSWORD_DEFAULT);
+          $_SESSION["email"] = $email_login;
+          $_SESSION["mdp"] = password_hash($mdp_login,PASSWORD_DEFAULT);
           header("Location: RDV.php");
           exit();
       } else {

@@ -91,7 +91,7 @@ session_start();
                 if(isset($_POST['valid']) && isset($_POST['selected_rdv'])){
                 $day= dbGetRDVByDay($db,$specialiste);
                 foreach($day as $med){
-                    $jour=$med['jour'];
+                    $jour=$med['date_dispo'];
                     $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
                     setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
                     $date = new DateTime($jour);
@@ -107,7 +107,7 @@ session_start();
                                 <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
                                 <select class='form-select' id='choixHoraire' name='horaire'>";
                                     foreach ($hour_dispo as $hour) {
-                                        echo "<option value=".$hour['jour'].">" . $hour['heure'] ." </option>";
+                                        echo "<option value=".$hour['date_dispo'].">" . $hour['heure'] ." </option>";
                                         
                                     }
                         echo "</select>
