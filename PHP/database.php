@@ -250,7 +250,7 @@
             $stmt = $conn->prepare('DELETE FROM heure_dispo WHERE date_dispo=:jour AND email_med=:email_med AND heure = :heure');
             $stmt->bindParam(':email_med',$email_med);
             $stmt->bindParam(':jour',$jour);
-            $stmt->bindParam(':jour',$jour);
+            $stmt->bindParam(':heure',$heure);
             $stmt->execute(); 
             $conn->commit();
         } catch (PDOException $e) {
