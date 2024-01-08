@@ -153,7 +153,11 @@
 
                   $heures = $_POST['heures'];
                   
+                  echo $_SESSION['email'];
+                  
                   if(!empty($_POST['Add'])){
+                    echo $date;
+                    echo $heures;
                     insertDispoByDay($_SESSION['email'],$date,$heures);
                   }
                 
