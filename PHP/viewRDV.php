@@ -63,7 +63,7 @@ session_start();
             $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
             if ($rdv['heure_rdv'] <= $dateHeureActuelle) {
                 echo "
-            <form action='viewRDV.php' method='post'>
+            <form action='RDV.php' method='post'>
                 <div class='card-group'>
                     <div class='card'>
                         <div class='card-body'>
@@ -79,58 +79,15 @@ session_start();
                                 </li>
                                 <li style='display: inline-block;margin-left :50px'>
                                     <div class='col-12' style='float right'>
-                                        <input type='hidden' name='selected_rdv' value='" . $rdv['id_rdv'] . "'> 
-                                        <input class='btn btn-primary position-absolute mt-3' type='submit' value='Reprendre rendez-vous' onclick='showDisponibilites(" . $rdv['id_rdv'] . ") name='valid'>
+                                        <input type='hidden' name='lieu' value='".strtoupper($rdv['code_postal_med'])."'>
+                                        <input type='hidden' name='nom' value='".strtoupper($rdv['nom'])."'>
+                                        <button type='submit' class='btn btn-custom text-white'>Reprendre rendez-vous</button>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>";
-                $specialiste=$rdv['nom_med'];
-                if(isset($_POST['valid']) && isset($_POST['selected_rdv'])){
-                $day= dbGetRDVByDay($db,$specialiste);
-                foreach($day as $med){
-                    $jour=$med['date_dispo'];
-                    $hour_dispo=dbGetRDVByHour($db,$specialiste,$jour);
-                    setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
-                    $date = new DateTime($jour);
-                    $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
-                    echo"<div class='card-group'>
-                        <div class='card border-info border-4 mx-4 rounded-0' style='background-color: #f8f9fa;'>
-                        <h4 class='card-text'>".$formattedDate."</h4>
-                        <form action='viewRDV.php' method='post'>
-                            <div class='card-body'>
-                            <ul>
-                                <li>
-                                <div class='mb-3'>
-                                <label for='choixHoraire' class='form-label'>Choisissez un horaire :</label>
-                                <select class='form-select' id='choixHoraire' name='horaire'>";
-                                    foreach ($hour_dispo as $hour) {
-                                        echo "<option value=".$hour['date_dispo'].">" . $hour['heure'] ." </option>";
-                                        
-                                    }
-                        echo "</select>
-                            </div>            
-                                </li>
-                            <li style='display: inline-block;margin-left :50px'>
-                            <div class='col-12' style='float right'>
-                            <input class='btn btn-primary position-absolute mt-3' type='submit' value='Prendre rendez-vous' name='valid'>
-                            </div>
-                            </li>
-                        </div>
-                        </ul>
-                        </form>
-                    </div>
-                    </div>
-                    <br>";
-                  }
-                  //définis les variables pour la fonction addRDV
-                    $jour=$_POST['horaire'];
-                    $heure=$_POST['horaire'];
-                    $idrdv=rand(1,32767);
-                    $email_med=$_POST['email_med'];
-            }
         
             }"</form>";
             

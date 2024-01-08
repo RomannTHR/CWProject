@@ -29,11 +29,11 @@
     <div class="d-flex">
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">🔎</span>
-        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Nom , spécialité"  aria-describedby="basic-addon1" name="specialiste">
+        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Nom , spécialité"  aria-describedby="basic-addon1" name="specialiste" value="<?php echo isset($_POST['nom']) ?>">
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">🏥</span>
-        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Lieu"  aria-describedby="basic-addon1" name="lieu">
+        <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Lieu"  aria-describedby="basic-addon1" name="lieu" value="<?php echo isset($_POST['lieu']) ?>">
       </div>
       <div style="width: 150px;"class="input-group-text">
         <button name='research' class="btn btn-primary" type="submit">Rechercher</button>
