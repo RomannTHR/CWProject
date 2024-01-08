@@ -24,10 +24,10 @@ session_start();
   <br>
       <?php
         $dateHeureActuelle=date('Y-m-d H:i:s');
-
         include 'database.php';
         $db = dbConnect();
         $email_client=$_SESSION['email'];
+        echo $email_client;
         $rdvPassed=getRDVclient($db,$email_client);
         setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
         echo "<h2 class='text-center'>Vos rendez-vous à venir :</h2>";
