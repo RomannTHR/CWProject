@@ -64,7 +64,7 @@ session_start();
             if ($rdv['heure_rdv'] <= $dateHeureActuelle) {
                 echo "
             <form action='RDV.php' method='post'>
-                <div class='card-group'>
+                <div class='card-group' style='margin: 25px;'>
                     <div class='card'>
                         <div class='card-body'>
                             <ul>
@@ -79,15 +79,17 @@ session_start();
                                 </li>
                                 <li style='display: inline-block;margin-left :50px'>
                                     <div class='col-12' style='float right'>
-                                        <input type='hidden' name='lieu' value='".strtoupper($rdv['code_postal_med'])."'>
-                                        <input type='hidden' name='nom' value='".strtoupper($rdv['nom'])."'>
-                                        <button type='submit' class='btn btn-custom text-white'>Reprendre rendez-vous</button>
+                                        <input type='hidden' name='lieu' value='".$rdv['code_postal_med']."'>
+                                        
+                                        <input type='hidden' name='nom' value='".$rdv['nom_med']."'>
+                                        <button type='submit' class='btn btn-primary'>Reprendre rendez-vous</button>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>";
+
         
             }"</form>";
             
