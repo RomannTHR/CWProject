@@ -1,3 +1,6 @@
+<?php 
+  session_start();
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -12,8 +15,8 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
-    <a href="signinmed.php" class="btn btn-primary">
-      Vous êtes practicien ?
+    <a href="signin.php" class="btn btn-primary">
+      Vous êtes un patient ?
     </a>
   </div>
   </nav>
@@ -35,11 +38,29 @@
       <input type="password" id="formGroupExampleInput2" class="form-control" placeholder="Entrez un Mot de Passe valide" aria-label="Username" aria-describedby="basic-addon1" name="mdp_login">
     </div>
     <div class="position-relative">
-    <input class="btn btn-primary position-absolute mt-3" type="submit" value="Se connecter" name="connect"><div id="no_acc" class ="position-absolute start-50 top-50 mt-4">Pas de compte ? <a href="signin.php">Créer un compte</a></div>
+    <input class="btn btn-primary position-absolute mt-3" type="submit" value="Se connecter" name="connect"><div id="no_acc" class ="position-absolute start-50 top-50 mt-4">Pas de compte ? <a href="signinmed.php">Créer un compte Medecin</a></div>
     </div>
   </div>
   </form>
+  <?php
+    require_once("database.php");
 
+    $email_login = $_POST['email_login'];
+    $mdp_login = $_POST['mdp_login'];
+    
+
+
+    if(!empty($_POST['connect'])){
+      if(checkLoginMed($email_login, $mdp_login)){
+          $_SESSION["email"] = $email_login;
+          $_SESSION["mdp"] = password_hash($mdp_login,PASSWORD_DEFAULT);
+          header("Location: viewRDVMed.php");
+          exit();
+      } else {
+          echo "<p style='text-align : center; margin-top : 4em;'>Identifiants incorrects. Veuillez réessayer.</p>";
+      }
+  }
+  ?>
 
 
 

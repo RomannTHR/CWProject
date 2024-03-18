@@ -41,6 +41,17 @@
         <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Confirmation e-mail</span>
         <input type="email" id="formGroupExampleInput2" class="form-control" placeholder="Confirmer votre adresse e-mail" aria-label="Username" aria-describedby="basic-addon1" name="confemail">
+        <?php 
+          $email = $_POST['email'];
+          $confemail = $_POST['confemail'];
+          if(!empty($_POST['Valid'])){
+            if($email != $confemail){
+              echo "<p style='color : red'>Vous n'avez pas entrer la bonne adresse e-mail</p>";
+            }  
+          }
+
+ 
+        ?>
         </div>
 
         <div class="input-group mb-3">
@@ -58,6 +69,30 @@
 
     </form>
     
+    <?php 
+      require_once("database.php");
+        
+      $prenom = $_POST['prenom'];
+      $nom = $_POST['nom'];
+      $tel = $_POST['tel'];
+      $email = $_POST['email'];
+      $confemail = $_POST['confemail'];
+      $mdp = $_POST['mdp'];
+
+
+
+      if (!empty($_POST['Valid'])) {
+        if (isFormValid($prenom, $nom, $tel, $email, $confemail, $mdp)) {
+            if (sendDataToDB($nom, $prenom, $tel, $email, $mdp)) {
+                echo "<p style='text-align : center; margin-top : 4em; color : green;'>Enregistrement réussi.</p>";
+            } else {
+                echo "<p style='text-align : center; margin-top : 4em; color : red;'>Vous vous êtes déjà enregistré avec cet e-mail.</p>";
+            }
+        }
+    }
+    
+    
+    ?>
 
     
 
