@@ -45,17 +45,6 @@
         <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Confirmation e-mail</span>
         <input type="email" id="formGroupExampleInput2" class="form-control" placeholder="Confirmer votre adresse e-mail" aria-label="Username" aria-describedby="basic-addon1" name="confemail_med">
-        <?php 
-          $email_med = $_POST['email_med'];
-          $confemail_med = $_POST['confemail_med'];
-          if(!empty($_POST['Valid'])){
-            if($email_med != $confemail_med){
-              echo "<p style='color : red'>Vous n'avez pas entrer la bonne adresse e-mail</p>";
-            }  
-          }
-
- 
-        ?>
         </div>
         <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">Spécialité</span>
@@ -76,34 +65,6 @@
 
     </form>
     
-    <?php 
-      require_once("database.php");
-        
-      $prenom_med = $_POST['prenom_med'];
-      $nom_med = $_POST['nom_med'];
-      $tel_med = $_POST['tel_med'];
-      $email_med = $_POST['email_med'];
-      $confemail_med = $_POST['confemail_med'];
-      $codepos_med = $_POST['codepos_med'];
-      $specialite_med = $_POST['specialite_med'];
-      $mdp_med = $_POST['mdp_med'];
-
-
-
-      if(!empty($_POST['Valid_med'])){
-        if(isFormValidMed($prenom_med,$nom_med,$tel_med,$email_med,$confemail_med,$codepos_med,$specialite_med,$mdp_med)){
-          if(sendMedToDB($nom_med,$prenom_med,$codepos_med,$tel_med,$email_med,$specialite_med,$mdp_med)){
-            echo "<p style='text-align : center; margin-top : 4em; color : green;'>Enregistrement réussi.</p>";
-          }
-          else{
-            echo "<p style='text-align : center; margin-top : 4em; color : red;'>Vous vous êtes déjà enregistré avec cet e-mail.</p>";
-          }
-        }
-      }
-
-    
-    
-    ?>
 
     
 
