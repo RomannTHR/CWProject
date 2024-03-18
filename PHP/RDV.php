@@ -15,10 +15,11 @@
     <a class="navbar-brand mx-auto p-2" href="#">
       <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
     </a>
+    <a class="navbar-brand mx-auto p-2 btn btn-primary" href="viewRDV.php"> Voir ses rendez-vous
+    </a>
     <a href="identify.php">
       <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
     </a>
-    
   </div>
   </nav>
   <div class="p-3 mb-2 bg-primary-subtle text-emphasis-primary">

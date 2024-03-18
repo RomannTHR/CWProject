@@ -26,8 +26,7 @@ session_start();
         $dateHeureActuelle=date('Y-m-d H:i:s');
         include 'database.php';
         $db = dbConnect();
-        $email_client=$_SESSION['email'];
-        echo $email_client;
+        $email_client=$_SESSION['email'];   
         $rdvPassed=getRDVclient($db,$email_client);
         setlocale(LC_TIME, 'fr_FR.UTF-8', 'fra');
         echo "<h2 class='text-center'>Vos rendez-vous à venir :</h2>";
@@ -36,7 +35,7 @@ session_start();
           $formattedDate = strftime('%A %e %B %Y', $date->getTimestamp());
             if ($rdv['heure_rdv'] > $dateHeureActuelle) {
                 echo "<div class='card-group'>
-                    <div class='card'>
+                    <div class='card' style='margin:25px;'>
                         <div class='card-body'>
                             <ul>
                                 <li style='display: inline-block;margin-left :50px'>
@@ -48,7 +47,9 @@ session_start();
                                 <li style='display: inline-block;margin-left :50px'>
                                     <h4 class='card-text'>" .$formattedDate. "</h4>
                                 </li>
-                                
+                                <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" .$date->format('H:i:s'). "</h4>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -78,6 +79,9 @@ session_start();
                                     <h4 class='card-text'>" .$formattedDate. "</h4>
                                 </li>
                                 <li style='display: inline-block;margin-left :50px'>
+                                    <h4 class='card-text'>" .$date->format('H:i:s'). "</h4>
+                                </li>
+                                <li style='display: inline-block;margin-left :50px'>
                                     <div class='col-12' style='float right'>
                                         <input type='hidden' name='lieu' value='".$rdv['code_postal_med']."'>
                                         
@@ -85,6 +89,7 @@ session_start();
                                         <button type='submit' class='btn btn-primary'>Reprendre rendez-vous</button>
                                     </div>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
