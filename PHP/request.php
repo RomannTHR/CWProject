@@ -105,6 +105,31 @@
 
         }  
     }
+    if($requestRessource='addRDV'){  
+        if($request_type=='GET'){
+
+        }
+            
+        if($request_type=='POST'){
+            $email_med = $_POST['medecin'];
+            $heure = $_POST['heure'];
+            $email_client = $_SESSION["email"];
+            $idrdv=rand(1,32767);
+            
+            $newDate = date("Y-m-d", strtotime($_POST['date'])); 
+
+            $result = addRDV($conn,$email_client,$email_med,$newDate,$heure,$idrdv);
+
+            echo json_encode($result);
+        }
+        if($request_type=='PUT'){
+
+        }
+        if($request_type=='DELETE'){
+
+        }  
+    }
+
 
     if($requestRessource=='signin'){  
 
