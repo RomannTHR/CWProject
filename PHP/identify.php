@@ -54,7 +54,7 @@
       if(checkLogin($email_login, $mdp_login)){
           $_SESSION["email"] = $email_login;
           $_SESSION["mdp"] = password_hash($mdp_login,PASSWORD_DEFAULT);
-          header("Location: RDV.php");
+          header("Location: ../HTML/index.html");
           exit();
       } else {
           echo "<p style='text-align : center; margin-top : 4em;'>Identifiants incorrects. Veuillez réessayer.</p>";

@@ -172,7 +172,7 @@
     
     function dbGetRDVByDay($conn,$email_med){
         try{
-            $request = 'SELECT date_dispo FROM jour WHERE email_med = :email_med;' ;
+            $request = 'SELECT date_dispo,email_med FROM jour WHERE email_med = :email_med;' ;
             $statement = $conn->prepare($request);
             $statement->bindParam(':email_med', $email_med);
             $statement->execute();
@@ -353,6 +353,23 @@
             $conn = dbConnect();
 
             $request = 'SELECT *,client.nom,client.prenom,client.telephone FROM rendezvous JOIN client ON client.email = rendezvous.email WHERE heure_rdv > CURRENT_DATE AND email_med = :emailmed LIMIT 10';
+            $statement = $conn->prepare($request);
+            $statement->bindParam(':emailmed', $email_med);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+          }
+          catch (PDOException $e) {
+            echo 'Connexion échouée : ' . $e->getMessage();
+          }
+    }
+
+    function getInfosMed($email_med){
+        try{
+            $conn = dbConnect();
+
+            $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE email_med = :emailmed';
             $statement = $conn->prepare($request);
             $statement->bindParam(':emailmed', $email_med);
             $statement->execute();
