@@ -15,10 +15,13 @@ $(document).on('submit', '.form-card', function(event) {
   console.log(medecin);
   console.log(date);
   console.log(choixHoraire);
-  ajaxRequest('POST', '../PHP/request.php/addRDV/', displayRDV, 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire);
+  ajaxRequest('POST', '../PHP/request.php/addRDV/', function () {
+    ajaxRequest('DELETE','../PHP/request.php/addRDV/?' + 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire, function () {
+      console.log('Vous avez bien pris votre RDV');
+    });
+  }, 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire);
+
 });
-
-
 //Fonction pour afficher les rdv
 
 function getDayRDV(infos){
@@ -89,9 +92,7 @@ function displayCard(infos){
 
 }
 
-function displayRDV($infos){
-  console.log("Vous avez bien pris rdv");
-}
+
 
 
 

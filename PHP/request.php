@@ -127,6 +127,18 @@
         }
         if($request_type=='DELETE'){
 
+            $email_med = $_GET['medecin'];
+            $heure = $_GET['heure'];
+            $email_client = $_SESSION["email"];
+            $idrdv=rand(1,32767);
+            
+            $newDate = date("Y-m-d", strtotime($_GET['date'])); 
+
+            $result = supprMedRdvDispo($conn,$email_med,$newDate,$heure);
+
+            echo json_encode($result);
+
+
         }  
     }
 
