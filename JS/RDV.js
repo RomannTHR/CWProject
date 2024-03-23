@@ -12,12 +12,11 @@ $(document).on('submit', '.form-card', function(event) {
   var medecin = $(this).find('.medecin').val();
   var date = $(this).find('.date').val();
   var choixHoraire = $(this).find('.choixHoraire').val();
-  console.log(medecin);
-  console.log(date);
-  console.log(choixHoraire);
   ajaxRequest('POST', '../PHP/request.php/addRDV/', function () {
     ajaxRequest('DELETE','../PHP/request.php/addRDV/?' + 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire, function () {
-      console.log('Vous avez bien pris votre RDV');
+      $('#card-body').html("<div class='alert alert-success alert-dismissible fade show' role='alert'>" +
+      "Vous avez bien pris votre rendez-vous! Merci." +
+    "</div>");
     });
   }, 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire);
 
