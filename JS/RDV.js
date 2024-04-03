@@ -1,18 +1,25 @@
 
 $('#searchForm').on('submit', (event) =>{
   event.preventDefault();
+  //récupère l'endroit où mettre les cards
   document.getElementById("card-body").innerHTML = "";
+  //request pour chercher en fonction des valeurs dans les champs (elle commence par prendre les jours dispo)
   ajaxRequest('GET', '../PHP/request.php/RDV/?specialite=' + $('#inputNomSpe').val() + '&lieu=' + $('#inputLieu').val(), getDayRDV);
 });
 
 
-
+//submit les cards
 $(document).on('submit', '.form-card', function(event) {
   event.preventDefault();
+  //récupère médecin sur la cards
   var medecin = $(this).find('.medecin').val();
+  //récupère date sur la cards
   var date = $(this).find('.date').val();
+  //récupère l'horaire sur la cards
   var choixHoraire = $(this).find('.choixHoraire').val();
+  //insère rdv pris dans la bdd
   ajaxRequest('POST', '../PHP/request.php/addRDV/', function () {
+    //supprime le rdv dans la bdd
     ajaxRequest('DELETE','../PHP/request.php/addRDV/?' + 'medecin=' + medecin + '&date=' + date + '&heure=' + choixHoraire, function () {
       $('#card-body').html("<div class='alert alert-success alert-dismissible fade show' role='alert'>" +
       "Vous avez bien pris votre rendez-vous! Merci." +
@@ -22,13 +29,13 @@ $(document).on('submit', '.form-card', function(event) {
 
 });
 //Fonction pour afficher les rdv
-
+//récupère les jours dispo pour chaque médecin
 function getDayRDV(infos){
   for(let i =0; i<infos.length;i++){
     ajaxRequest('GET', '../PHP/request.php/getDayRDV/?medecin=' + infos[i]['email_med'], getHourRDV);
   }
 }
-
+//donne les heures dispo pour un jour et pour un médecin
 function getHourRDV(infos){
   for(let i=0;i<infos.length;i++){
     ajaxRequest('GET', '../PHP/request.php/getHourRDV/?medecin=' + infos[i]['email_med'] + '&jour=' + infos[i]['date_dispo'], displayCard);
@@ -38,7 +45,7 @@ function getHourRDV(infos){
 
 
 
-
+//fonction pour renvoyer les cards (affichage pour index.html)
 function displayCard(infos){
   var optionsHTML = "";
 
