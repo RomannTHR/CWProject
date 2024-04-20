@@ -9,9 +9,8 @@
     $request = explode('/', $request);
     $requestRessource = array_shift($request);
     if($requestRessource=='identify'){  
-        //checkLogin
         if($request_type=='GET'){
-            
+
         }
         if($request_type=='POST'){
 
@@ -65,9 +64,7 @@
         //dbGetRDVByDay
         //addRDV
         if($request_type=='GET'){
-            
             $jours = dbGetRDVByDay($conn,$_GET['medecin']); 
-
             echo json_encode($jours);
         }
             
@@ -105,7 +102,7 @@
 
         }  
     }
-    if($requestRessource='addRDV'){  
+    if($requestRessource=='addRDV'){  
         if($request_type=='GET'){
 
         }
@@ -208,7 +205,7 @@
 
         }  
     }
-    if($requestRessource='getRDVpassed'){
+    if($requestRessource=='getRDVpassed'){
         if($request_type=='GET'){
             $email_client = $_SESSION["email"];
             $RDVPassed=getRDVClient($conn,$email_client);

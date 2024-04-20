@@ -156,7 +156,7 @@
 
     function dbGetMed($conn, $specialiste,$lieu){
         try{
-        $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE specialite = :spe OR nom_med = :spe AND code_postal_med = :codepos';
+        $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE (specialite = :spe OR nom_med = :spe )AND code_postal_med = :codepos';
         $statement = $conn->prepare($request);
         $statement->bindParam(':spe', $specialiste);
         $statement->bindParam(':codepos', $lieu);
@@ -263,7 +263,7 @@
     
     function getRDVclient($conn,$email_client){
         try{
-            $request = 'SELECT heure_rdv,nom_med,prenom_med,specialite,code_postal_med,id_rdv from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
+            $request = 'SELECT * from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
             $statement = $conn->prepare($request);
             $statement->bindParam(':email', $email_client);
             $statement->execute();
