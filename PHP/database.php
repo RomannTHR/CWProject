@@ -106,12 +106,13 @@
             $stmt->bindParam(':prenom',$prenom);
             $stmt->bindParam(':telephone',$telephone);
             $stmt->bindParam(':mdp',password_hash($mdp, PASSWORD_DEFAULT));
+            $mdp_hash = password_hash($mdp, PASSWORD_DEFAULT);
+            $stmt->bindParam(':mdp',$mdp_hash);
             $stmt->execute(); 
             $conn->commit();
             return true; // Enregistrement réussi
             } catch (PDOException $e) {
                 $conn->rollBack();
-                echo 'Connexion échouée : ' . $e->getMessage();
                 return false;
             }
     }
@@ -142,6 +143,8 @@
             $stmt->bindParam(':specialite',$spe);
             $stmt->bindParam(':codepos',$codepos);
             $stmt->bindParam(':mdp',password_hash($mdp, PASSWORD_DEFAULT));
+            $mdp_hash = password_hash($mdp, PASSWORD_DEFAULT);
+            $stmt->bindParam(':mdp',$mdp_hash);
             $stmt->execute(); 
             $conn->commit();
 
@@ -157,6 +160,7 @@
     function dbGetMed($conn, $specialiste,$lieu){
         try{
         $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE (specialite = :spe OR nom_med = :spe )AND code_postal_med = :codepos';
+        $request = 'SELECT nom_med,prenom_med,specialite,email_med,code_postal_med FROM medecin WHERE specialite = :spe OR nom_med = :spe AND code_postal_med = :codepos';
         $statement = $conn->prepare($request);
         $statement->bindParam(':spe', $specialiste);
         $statement->bindParam(':codepos', $lieu);
@@ -203,11 +207,13 @@
     
 
     function addRDVInCalendar($email_med){
+    function addRDVInCalendar($db,$email_med){
         try{
             $conn = dbConnect();
 
             $request = 'SELECT rendezvous.heure_rdv,client.nom,client.prenom,medecin.specialite FROM rendezvous JOIN client ON rendezvous.email = client.email JOIN medecin ON rendezvous.email_med = medecin.email_med WHERE medecin.email_med = :emailmed';
             $statement = $conn->prepare($request);
+            $statement = $db->prepare($request);
             $statement->bindParam(':emailmed', $email_med);
             $statement->execute();
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -264,6 +270,7 @@
     function getRDVclient($conn,$email_client){
         try{
             $request = 'SELECT * from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
+            $request = 'SELECT heure_rdv,nom_med,prenom_med,specialite,code_postal_med,id_rdv from rendezvous join medecin on medecin.email_med=rendezvous.email_med where email=:email;';
             $statement = $conn->prepare($request);
             $statement->bindParam(':email', $email_client);
             $statement->execute();
