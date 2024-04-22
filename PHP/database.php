@@ -113,6 +113,7 @@
             return true; // Enregistrement réussi
             } catch (PDOException $e) {
                 $conn->rollBack();
+                //echo 'Connexion échouée : ' . $e->getMessage();
                 return false;
             }
     }
