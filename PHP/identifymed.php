@@ -26,10 +26,10 @@
   <h1 style="text-align : center; margin-top : 5vw;">Connexion</h1>
   <form id="login" action="" method="post">
   <div class="container mx-auto p-2" style="width: 500px;">
-    <label for="formGroupExampleInput1" class="form-label">E-mail</label>
+    <label for="formGroupExampleInput2" class="form-label">E-mail</label>
     <div class="input-group mb-3">
       <span class="input-group-text" id="basic-addon1">@</span>
-      <input type="text" id="formGroupExampleInput1" class="form-control" placeholder="Entrez un E-Mail valide" aria-label="Username" aria-describedby="basic-addon1" name="email_login">
+      <input type="text" id="formGroupExampleInput2" class="form-control" placeholder="Entrez un E-Mail valide" aria-label="Username" aria-describedby="basic-addon1" name="email_login">
     </div>
 
     <label for="formGroupExampleInput2" class="form-label">Mot de passe</label>
@@ -54,7 +54,7 @@
       if(checkLoginMed($email_login, $mdp_login)){
           $_SESSION["email"] = $email_login;
           $_SESSION["mdp"] = password_hash($mdp_login,PASSWORD_DEFAULT);
-          header("Location: ../HTML/index.html?formSubmitted=true");
+          header("Location: viewRDVMed.php");
           exit();
       } else {
           echo "<p style='text-align : center; margin-top : 4em;'>Identifiants incorrects. Veuillez réessayer.</p>";
