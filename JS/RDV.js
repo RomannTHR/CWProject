@@ -1,10 +1,7 @@
-
-$('#searchForm').on('submit', (event) =>{
 $(document).on('submit', '#searchForm', function(event) {
   event.preventDefault();
   document.getElementById("card-body").innerHTML = "";
   //request pour chercher en fonction des valeurs dans les champs (elle commence par prendre les jours dispo)
-  ajaxRequest('GET', '../PHP/request.php/RDV/?specialite=' + $('#inputNomSpe').val() + '&lieu=' + $('#inputLieu').val(), getDayRDV);
   ajaxRequest('GET', '../PHP/request.php/RDV/?specialite=' + $(document).find('#inputNomSpe').val() + '&lieu=' + $(document).find('#inputLieu').val(), getDayRDV);
 });
 

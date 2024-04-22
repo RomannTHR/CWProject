@@ -1,6 +1,4 @@
 <?php
-    include 'database.php';
-
     include("database.php");
     session_start();
 
@@ -8,9 +6,6 @@
     error_reporting(E_ALL);
 
     $conn=dbConnect();
-    $request_type=$_SERVER['REQUEST_METHOD'];
-    $request = substr($_SERVER['PATH_INFO'], 1);
-    $request = explode('/', $request);
 
 
     $method_request = $_SERVER['REQUEST_METHOD'];
@@ -18,8 +13,6 @@
     $request = substr($_SERVER['PATH_INFO'], 1); 
     $request = explode('/', $request); 
     $requestRessource = array_shift($request);
-    if($requestRessource=='identify'){  
-        if($request_type=='GET'){
 
     if(isset($_SESSION['page']) == false){
         $_SESSION['page'] = "identifyClient";
@@ -79,7 +72,6 @@
         if($method_request=='PUT'){
 
         }
-        if($request_type=='POST'){
         if($method_request=='DELETE'){
 
         }  
@@ -108,24 +100,20 @@
 
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
     }
     if($requestRessource=='identifymed'){  
         //checkLoginMed
-        if($request_type=='GET'){
         if($method_request=='GET'){
             
 
 
         }
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
             $email_login = $_POST['email_login'];
@@ -143,11 +131,9 @@
 
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
@@ -157,21 +143,17 @@
         //dbGetRDVByHour
         //dbGetRDVByDay
         //addRDV
-        if($request_type=='GET'){
         if($method_request=='GET'){
             $medecins = dbGetMed($conn, $_GET['specialite'],$_GET['lieu']); 
             echo json_encode($medecins);
         }
             
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
@@ -182,7 +164,6 @@
         //dbGetRDVByHour
         //dbGetRDVByDay
         //addRDV
-        if($request_type=='GET'){
         if($method_request=='GET'){
             
             $jours = dbGetRDVByDay($conn,$_GET['medecin']); 
@@ -190,15 +171,12 @@
             echo json_encode($jours);
         }
             
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
@@ -209,7 +187,6 @@
         //dbGetRDVByHour
         //dbGetRDVByDay
         //addRDV
-        if($request_type=='GET'){
         if($method_request=='GET'){
         
             $heures = dbGetRDVByHour($conn,$_GET['medecin'],$_GET['jour']);
@@ -218,26 +195,21 @@
             echo json_encode($result);
         }
             
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
     }
     if($requestRessource=='addRDV'){  
-        if($request_type=='GET'){
         if($method_request=='GET'){
 
         }
             
-        if($request_type=='POST'){
         if($method_request=='POST'){
             $email_med = $_POST['medecin'];
             $heure = $_POST['heure'];
@@ -250,11 +222,9 @@
 
             echo json_encode($result);
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
             $email_med = $_GET['medecin'];
@@ -299,11 +269,9 @@
     if($requestRessource=='signin'){  
 
         //sendDataToDB
-        if($request_type=='GET'){
         if($method_request=='GET'){
 
         }
-        if($request_type=='POST'){
         if($method_request=='POST'){
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
@@ -321,7 +289,6 @@
 
             echo json_encode($result);
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
@@ -333,12 +300,10 @@
 
     if($requestRessource=='signinmed'){
         //sendMedToDB
-        if($request_type=='GET'){
         if($method_request=='GET'){
 
 
         }
-        if($request_type=='POST'){
         if($method_request=='POST'){
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
@@ -360,7 +325,6 @@
 
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
 
@@ -369,7 +333,6 @@
 
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
@@ -378,19 +341,15 @@
         //getRDVClient 
         //getNumberOfResult
         //getNextRDVByMed
-        if($request_type=='GET'){
         if($method_request=='GET'){
 
         }
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
@@ -399,21 +358,18 @@
         //supprMedRDvDispo
         //addRDVInCalendar
         //insertDispoByDay
-        if($request_type=='GET'){
         if($method_request=='GET'){
 
         }
-        if($request_type=='POST'){
         if($method_request=='POST'){
 
         }
-        if($request_type=='PUT'){
         if($method_request=='PUT'){
 
         }
-        if($request_type=='DELETE'){
         if($method_request=='DELETE'){
 
         }  
     }
+
 ?>
