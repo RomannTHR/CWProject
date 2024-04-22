@@ -9,6 +9,14 @@
       <script src="../JS/RDV.js" defer></script>
       <script src="../JS/getRDV.js" defer></script>
       <script src="../JS/reprendreRDV.js" defer></script>
+      <script src="../JS/printCalendar.js" defer></script>
+      <script src="../JS/identify.js" defer></script>
+      <script src="../JS/refresh.js" defer></script>
+      <script src="../JS/signin.js" defer></script>
+
+
+
+      
           <!-- CSS Styles -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
@@ -25,14 +33,20 @@
    </head>
    <body>  
       <nav class="navbar" style="background-color: #7b9dfc;">
-         <div class="container">
-           <a class="navbar-brand mx-auto p-2" href="index.html">
+         <div class="container" id = "containerNav">
+           <a class="navbar-brand mx-auto p-2" href="#">
              <img src="../Images/Allobobo.png" alt="Bootstrap" width="300" height="98">
            </a>
            <div id="divViewRDV">
             <input type='button' id="viewRDV" class="btn btn-primary" value="Voir ses rendez-vous">
           </div>
+           <input type="button" id = "changerPage" class="medButton btn btn-primary" value="Vous êtes practicien ?">
          </div>
+         <button id="clickDeco" style="border:none; padding:0%;  display: none;">
+          <img src="../Images/deco.png" alt="Bootstrap" width="100" height="98">
+         </button>
+
+
       </nav>
       
       <!-- Errors -->
@@ -40,31 +54,37 @@
       </section>
 
       <!-- Content -->
-      <!--Container qui se supprime pour chaque nouvelle page-->
+
       <div id="container">
-         <div class="p-3 mb-2 bg-primary-subtle text-emphasis-primary">
-            <br>
-            <div id="searchForm">
-              <form>
-                <h1 style="text-align: center;">Prendre rendez-vous</h1>
-                <div class="container mx-auto p-2 text-center" style="max-width: 500px;">
-                  <div class="d-flex">
-                    <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">🔎</span>
-                      <input type="text" id="inputNomSpe" class="form-control" placeholder="Nom , spécialité"  aria-describedby="basic-addon1" name="specialiste">
-                    </div>
-                    <div class="input-group mb-3">
-                      <span class="input-group-text" id="basic-addon1">🏥</span>
-                      <input type="text" id="inputLieu" class="form-control" placeholder="Lieu"  aria-describedby="basic-addon1" name="lieu">
-                    </div>
-                    <div style="width: 150px;"class="input-group-text">
-                      <button name='research' class="btn btn-primary" type="submit">Rechercher</button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div id="card-body" class='d-flex justify-content-center ' style="flex-wrap : wrap;"></div>
+      
+        <h1 style="text-align : center; margin-top : 5vw;">Connexion</h1>
+        <form id="login" method="post">
+        <div class="container mx-auto p-2" style="width: 500px;">
+          <label for="formGroupExampleInput2" class="form-label">E-mail</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input type="text" id="email_login" class="form-control" placeholder="Entrez un E-Mail valide" aria-label="Username" aria-describedby="basic-addon1" name="email_login">
+          </div>
+      
+          <label for="formGroupExampleInput2" class="form-label">Mot de passe</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">🔑</span>
+            <input type="password" id="mdp_login" class="form-control" placeholder="Entrez un Mot de Passe valide" aria-label="Username" aria-describedby="basic-addon1" name="mdp_login">
+          </div>
+          <div class="position-relative">
+          <input class="btn btn-primary position-absolute mt-3" type="submit" value="Se connecter" name="connect"><div id="no_acc" class ="position-absolute start-50 top-50 mt-4">Pas de compte ? <input type="button"  id="createAccount" class="btn btn-primary" value="Créer un compte">
+          </div>
+        </div>
+        </form>
+
+      
+      
+      
+      
+        </body>
+      </html>
+      
+      
             
 
       </div>
