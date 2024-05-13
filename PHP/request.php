@@ -371,24 +371,4 @@
 
         }  
     }
-    
-    if($requestRessource=='getRDVpassed'){
-        if($request_type=='GET'){
-            $email_client = $_SESSION["email"];
-            $RDVPassed=getRDVClient($conn,$email_client);
-            echo json_encode($RDVPassed);
-        }
-        if($request_type=='POST'){
-
-        }
-        if($request_type=='PUT'){
-
-        }
-        if($request_type=='DELETE'){
-
-        }
-    }
-
-
-
 ?>
